@@ -13,13 +13,22 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/@types/*": ["src/@types/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@/@types/*": [
+        "src/@types/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "@types/**/*.d.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "@types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

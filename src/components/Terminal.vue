@@ -62,7 +62,7 @@ const indexList = () => {
   //console.log(indexListOpened.value, props.projects);
 };
 
-const goToProject = (project) => {
+const goToProject = (project: any) => {
   // console.log(project, "project");
   emit("scroll-to-project", project.sys.id);
 };

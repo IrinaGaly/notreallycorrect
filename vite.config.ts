@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import dynamicImport from "vite-plugin-dynamic-import";
-
 import * as path from "path";
 
 export default defineConfig({
@@ -27,6 +26,5 @@ export default defineConfig({
       },
     },
   },
-
-  base: "/",
+  base: "/notreallycorrect/",
 });

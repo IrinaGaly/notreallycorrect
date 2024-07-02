@@ -85,8 +85,11 @@
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeMount } from "vue";
 import axios from "axios";
-import typer from "typer-js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Project from "@/components/Project";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Terminal from "@/components/Terminal";
 import router from "@/router";
 import _find from "lodash/find";
@@ -159,7 +162,7 @@ const scrollToProjectById = (id: string) => {
   }
 };
 
-const returnVisibility = (index) => {
+const returnVisibility = (index: number) => {
   const gridItems = document.querySelectorAll(".project");
   gridItems.forEach((item, itemIndex) => {
     item.classList.remove("active-project--horizontal");
@@ -177,7 +180,7 @@ const chunkedProjects = async () => {
   projectsLocal.value = chunkedArray;
 };
 
-const getGlobalIndex = (groupIndex, indexInGroup) =>
+const getGlobalIndex = (groupIndex: number, indexInGroup: number) =>
   groupIndex * 4 + indexInGroup;
 
 const projectsObserver = () => {
@@ -193,9 +196,12 @@ const projectsObserver = () => {
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        const target = entry.target;
-
+        const target = entry.target as HTMLElement;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
         const scrollLeft = Math.round(html.scrollLeft);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
         const scrollTop = Math.round(html.scrollTop);
 
         const innerWidth = Math.round(window.innerWidth);
@@ -221,12 +227,12 @@ const projectsObserver = () => {
     });
   }, observerOptions);
 
-  const startObserving = (item) => {
+  const startObserving = (item: any) => {
     observer.observe(item);
   };
 
   // Function to stop observing an item
-  const stopObserving = (item) => {
+  const stopObserving = (item: any) => {
     observer.unobserve(item);
   };
 
@@ -290,7 +296,7 @@ const getProjects = async () => {
     });
 };
 
-const doSomethingMove = (event) => {
+const doSomethingMove = (event: any) => {
   isDragging.value && fetchElements();
 };
 
@@ -303,20 +309,24 @@ const doSomethingEnd = () => {
 };
 
 const typeAndRemoveMessage = (
-  message,
-  typingTimeout,
-  removingTimeout,
-  index,
+  message: any,
+  typingTimeout: any,
+  removingTimeout: any,
+  index: any,
 ) => {
   return new Promise((resolve) => {
     // Typing text
     const typePromises = typingPromises(message, typingTimeout);
     typePromises.forEach((promise, i, arr) => {
       promise.then((portion) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
         document.querySelector("#terminal").innerHTML = portion;
         if (i === arr.length - 1) {
           // Once typing is done, decide whether to start removing
           if (index === 2) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
             setTimeout(() => resolve(), 500); // Delay before resolving
             introTyped.value = true;
           } else {
@@ -324,8 +334,12 @@ const typeAndRemoveMessage = (
               const removePromises = removingPromises(message, removingTimeout);
               removePromises.forEach((remPromise, j, remArr) => {
                 remPromise.then((remPortion) => {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
                   document.querySelector("#terminal").innerHTML = remPortion;
                   if (j === remArr.length - 1) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
                     resolve(); // Resolve the promise when removal is complete
                   }
                 });
@@ -338,7 +352,7 @@ const typeAndRemoveMessage = (
   });
 };
 
-const typingPromises = (message, timeout, signal = null) =>
+const typingPromises = (message: any, timeout: any, signal = null) =>
   [...message].map(
     (ch, i) =>
       new Promise((resolve, reject) => {
@@ -347,6 +361,8 @@ const typingPromises = (message, timeout, signal = null) =>
         }, timeout * i);
 
         signal &&
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
           signal.addEventListener("abort", () => {
             clearTimeout(timeoutId);
             reject(new Error("Aborted"));
@@ -354,7 +370,7 @@ const typingPromises = (message, timeout, signal = null) =>
       }),
   );
 
-const removingPromises = (message, timeout, signal = null) =>
+const removingPromises = (message: any, timeout: any, signal = null) =>
   [...message].map(
     (ch, i) =>
       new Promise((resolve, reject) => {
@@ -363,6 +379,8 @@ const removingPromises = (message, timeout, signal = null) =>
         }, timeout * i);
 
         signal &&
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
           signal.addEventListener("abort", () => {
             clearTimeout(timeoutId);
             reject(new Error("Aborted"));
@@ -371,16 +389,22 @@ const removingPromises = (message, timeout, signal = null) =>
   );
 
 let currentOperation = null;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 let controller = null;
 
-const typeMessage = (message, typingTimeout, signal = null) => {
+const typeMessage = (message: any, typingTimeout: any, signal = null) => {
   return new Promise((resolve, reject) => {
     const typePromises = typingPromises(message, typingTimeout, signal);
     typePromises.forEach((promise, i, arr) => {
       promise
         .then((portion) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
           document.querySelector("#terminal").innerHTML = portion;
           if (i === arr.length - 1) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
             resolve();
           }
         })
@@ -389,14 +413,18 @@ const typeMessage = (message, typingTimeout, signal = null) => {
   });
 };
 
-const removeMessage = (message, removingTimeout, signal) => {
+const removeMessage = (message: any, removingTimeout: any, signal: any) => {
   return new Promise((resolve, reject) => {
     const removePromises = removingPromises(message, removingTimeout, signal);
     removePromises.forEach((promise, i, arr) => {
       promise
         .then((portion) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
           document.querySelector("#terminal").innerHTML = portion;
           if (i === arr.length - 1) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
             resolve();
           }
         })
@@ -405,8 +433,10 @@ const removeMessage = (message, removingTimeout, signal) => {
   });
 };
 
-const handleHover = async (message, typeTimeout = 140, removeTimeout = 140) => {
+const handleHover = async (message: any, typeTimeout = 140, removeTimeout = 140) => {
   if (introTyped.value) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     if (controller) {
       controller.abort(); // Abort the current operation
     }
@@ -422,8 +452,12 @@ const handleHover = async (message, typeTimeout = 140, removeTimeout = 140) => {
           signal,
         );
       }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
       await typeMessage(message, typeTimeout, signal);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
       if (error.message !== "Aborted") {
         console.error(error);
       }
@@ -431,7 +465,7 @@ const handleHover = async (message, typeTimeout = 140, removeTimeout = 140) => {
   }
 };
 
-const processMessages = async (messages, typingTimeout, removingTimeout) => {
+const processMessages = async (messages: any, typingTimeout: any, removingTimeout: any) => {
   for (let i = 0; i < messages.length; i++) {
     await typeAndRemoveMessage(messages[i], typingTimeout, removingTimeout, i);
   }

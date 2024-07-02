@@ -59,15 +59,15 @@ const hoverOver = (image: Image) => {
   // console.log(`Mouse X: ${event.clientX}, Mouse Y: ${event.clientY}`);
 };
 
-const onMouseleave = (event) => {
+const onMouseleave = (event: any) => {
   hovered.value = false;
   emit("mouseout");
 };
-const hoverImage = (event) => {
+const hoverImage = (event: any) => {
   emit("on-hover");
 };
 
-const clickImage = (image) => {
+const clickImage = (image: any) => {
   // Increment the index and use modulo to wrap around to the start
   currentIndex.value =
     (currentIndex.value + 1) % props.project.fields.images.length;
@@ -87,7 +87,7 @@ const getImageDescription = (image: any) =>
   props.asset?.find((asset: any) => asset.sys.id === image?.sys?.id)?.fields
     ?.title ?? "";
 
-const onImageLazyLoad = (image) => {
+const onImageLazyLoad = (image: any) => {
   console.log(image, "lazy");
   emit("image-loaded");
 };
