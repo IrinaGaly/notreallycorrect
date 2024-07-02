@@ -1,0 +1,36 @@
+{
+  "name": "notreallycorrect",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "lodash": "^4.17.21",
+    "mappy-breakpoints": "^0.2.4",
+    "path": "^0.12.7",
+    "sass": "^1.77.4",
+    "typer-js": "^5.5.3",
+    "vite-plugin-dynamic-import": "^1.5.0",
+    "vue": "^3.4.21",
+    "vue-isotope": "^0.1.0",
+    "vue-lazyload": "^3.0.0",
+    "vue-router": "^4.3.3",
+    "vue3-dragscroll": "^1.0.2",
+    "vueisotope": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.5",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.3.2",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
+  }
+}
