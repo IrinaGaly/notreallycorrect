@@ -1,0 +1,28 @@
+# .gitlab-ci.yml
+
+# Use the Docker image with Node.js and GitLab CI dependencies
+image: node:latest
+
+# Define stages for the CI/CD pipeline
+stages:
+  - deploy
+
+# Define a job for deployment
+deploy:
+  stage: deploy
+  script:
+    # Install dependencies (if needed)
+    - npm install
+    # Build your project for production
+    - npm run build
+    # Deploy to GitLab Pages
+    - mv dist public  # Rename 'dist' folder to 'public' (GitLab Pages convention)
+    artifacts:
+      paths:
+        - public  # Specify the directory where static files are located
+  only:
+    - main  # Only deploy on changes to master branch
+  environment:
+    name: production  # Environment name
+  tags:
+    - docker  # Optional: Use tags to specify runner capabilities
