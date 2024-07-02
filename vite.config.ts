@@ -1,6 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { defineConfig } from 'vite';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import vue from '@vitejs/plugin-vue';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import dynamicImport from 'vite-plugin-dynamic-import';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import * as path from 'path';
 
 export default defineConfig({
@@ -12,6 +20,8 @@ export default defineConfig({
     alias: [
       {
         find: '@',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
         replacement: path.resolve(__dirname, './src'),
       },
     ],
