@@ -88,7 +88,6 @@ const getImageDescription = (image: any) =>
     ?.title ?? "";
 
 const onImageLazyLoad = (image: any) => {
-  console.log(image, "lazy");
   emit("image-loaded");
 };
 
