@@ -97,8 +97,8 @@ import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
 import _orderBy from "lodash/orderBy";
 
-const spaceId = "0r2vua7pt9sl";
-const accessToken = "G6fwMG2PqGK3z-C50t123AltfdwG5Sgc6a8B9FUQHmw";
+const spaceId = import.meta.env.VITE_SPACE_ID;
+const accessToken = import.meta.env.VITE_API_KEY;
 const contentTypeId = "projects";
 const isDragging = ref(false);
 const introTyped = ref(false);
@@ -242,11 +242,9 @@ const projectsObserver = () => {
 
     // Mouseover event to stop observing hovered item
     item.addEventListener("mousemove", () => {
-      console.log("mousemove");
       stopObserving(item);
     });
     item.addEventListener("mouseover", () => {
-      console.log("mouseover");
       stopObserving(item);
     });
   });
@@ -476,7 +474,6 @@ const elementsToType = ref();
 const addSizeClasses = (item: any, isActive = false) => {
   if (item) {
     const image = item.querySelector(".image");
-    console.log(image, "image", image.naturalWidth, image.naturalHeight);
 
     image?.addEventListener("load", function () {
       setImageOrientation(image, item, isActive);
@@ -488,7 +485,6 @@ const addSizeClasses = (item: any, isActive = false) => {
     }
   } else {
     const gridItems = document.querySelectorAll(".project");
-    console.log(gridItems, "item");
     gridItems.forEach((item) => {
       const image = item.querySelector("img");
 
@@ -518,7 +514,6 @@ const setImageOrientation = (
   item: Element,
   isActive: boolean,
 ) => {
-  console.log(item, image, image.naturalWidth, image.naturalHeight, "nfknd");
   if (image.naturalWidth >= image.naturalHeight) {
     // Image is horizontal
     if (isActive) {
@@ -548,7 +543,6 @@ onMounted(async () => {
     chunkedProjects();
   } else {
     projectsLocal.value = await projects.value.items;
-    console.log(projectsLocal.value, "ttu");
   }
   //addSizeClasses();
 

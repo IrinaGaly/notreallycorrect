@@ -19,8 +19,8 @@ import axios from "axios";
 import { ref, computed, onMounted } from "vue";
 import router from "@/router";
 
-const spaceId = "0r2vua7pt9sl";
-const accessToken = "G6fwMG2PqGK3z-C50t123AltfdwG5Sgc6a8B9FUQHmw";
+const spaceId = import.meta.env.VITE_SPACE_ID;
+const accessToken = import.meta.env.VITE_API_KEY;
 const contentTypeId = "main";
 
 const backgroundImage = ref({});
