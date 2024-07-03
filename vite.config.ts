@@ -11,6 +11,7 @@ import dynamicImport from "vite-plugin-dynamic-import";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as path from "path";
+import { resolve } from "path";
 
 process.env = { ...process.env, ...loadEnv("", process.cwd()) };
 
@@ -35,13 +36,16 @@ export default defineConfig({
     outDir: "dist", // Specify the output directory for Vite build
     assetsDir: ".", // Specify the assets directory (relative to outDir)
     emptyOutDir: true, // Clear the output directory before building
+    // rollupOptions: {
+    //   output: {
+    //     chunkFileNames: "assets/[name].[hash].js",
+    //     entryFileNames: "[name].[hash].js",
+    //     assetFileNames: "[name].[hash].[ext]",
+    //   },
+    //},
     rollupOptions: {
-      output: {
-        chunkFileNames: "assets/[name].[hash].js",
-        entryFileNames: "[name].[hash].js",
-        assetFileNames: "[name].[hash].[ext]",
-      },
+      input: resolve(__dirname, "index.html"), // Entry point for the build
     },
   },
-  base: "/", // Adjust base path as needed
+  base: "/notreallycorrect/",
 });
