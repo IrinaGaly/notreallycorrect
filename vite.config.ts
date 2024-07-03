@@ -43,5 +43,5 @@ export default defineConfig({
       },
     },
   },
-  base: "/", // Adjust base path as needed
+  base: "/notreallycorrect/", // Adjust base path as needed
 });
