@@ -128,33 +128,33 @@ export function setImageOrientation(
 ) {
   if (image.naturalWidth > image.naturalHeight) {
     /* Image is horizontal */
-    if (isActive) {
+    if (isActive && !item.classList.contains("active-project--horizontal")) {
       item.classList.remove("active-project--vertical");
       item.classList.remove("active-project--square");
       item.classList.add("active-project--horizontal");
-    } else {
+    } else if (!item.classList.contains("project--horizontal")) {
       item.classList.remove("project--vertical");
       item.classList.remove("project--square");
       item.classList.add("project--horizontal");
     }
   } else if (image.naturalWidth < image.naturalHeight) {
     /* Image is vertical */
-    if (isActive) {
+    if (isActive && !item.classList.contains("active-project--vertical")) {
       item.classList.remove("active-project--horizontal");
       item.classList.remove("active-project--square");
       item.classList.add("active-project--vertical");
-    } else {
+    } else if (!item.classList.contains("project--vertical")) {
       item.classList.remove("project--horizontal");
       item.classList.remove("project--square");
       item.classList.add("project--vertical");
     }
   } else {
     /* Image is square */
-    if (isActive) {
+    if (isActive && !item.classList.contains("active-project--square")) {
       item.classList.remove("active-project--vertical");
       item.classList.remove("active-project--horizontal");
       item.classList.add("active-project--square");
-    } else {
+    } else if (!item.classList.contains("project--square")) {
       item.classList.remove("project--vertical");
       item.classList.remove("project--horizontal");
       item.classList.add("project--square");

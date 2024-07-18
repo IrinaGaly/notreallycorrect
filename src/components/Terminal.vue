@@ -12,7 +12,7 @@
       <a
         id="index-toggle"
         data-toBeTyped="index"
-        class="cursor-pointer"
+        class="cursor-pointer index-toggle"
         @click="indexList"
         > index </a
       >
@@ -61,6 +61,10 @@ const indexList = () => {
   emit('open-index');
 };
 
+const closeIndexList = () => {
+  indexListOpened.value = false;
+}
+
 const toggleIdexList = () => {
   indexListOpened.value = !indexListOpened.value;
 };
@@ -70,7 +74,7 @@ const goToProject = (project: any) => {
 };
 
 defineExpose({
-  toggleIdexList,
+  closeIndexList,
 })
 </script>
 

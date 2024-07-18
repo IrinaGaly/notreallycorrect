@@ -95,6 +95,10 @@ import _orderBy from "lodash/orderBy";
 
 import { randomMarginsLeft, randomMarginsTop, scrollElementIntoView, createController, processMessage, setImageOrientation, API_PROJECTS } from './utils';
 
+export interface TerminalType {
+  closeIndexList: () => void;
+}
+
 const introTyped = ref(false);
 const container = ref(null);
 const indexListOpened = ref(false);
@@ -103,9 +107,23 @@ const projects = ref<any>([]);
 const projectsLocal = ref();
 const scrolling = ref(false);
 const elementsToType = ref();
-const SPEED = { min: 30, max: 50 };
-const chunkSizes = [2, 4, 3];
+const greetingSpeed = { min: 30, max: 50 };
+const chunkSizes = [2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3];
+const terminal = ref<TerminalType | null>(null);
 
+const handleClickOutside = (event: MouseEvent) => {
+  if (
+    event.target instanceof Element &&
+    !event.target.classList.contains('terminal__outdated') &&
+    !event.target.classList.contains('terminal__list') &&
+    !event.target.classList.contains('terminal__item') &&
+    !event.target.classList.contains('terminal__item--title') &&
+    !event.target.classList.contains('terminal__item--year') &&
+    !event.target.classList.contains('index-toggle')
+  ) {
+    terminal?.value?.closeIndexList();
+  }
+};
 
 const onImageChange = (id: string) => {
   addSizeClasses(id, true);
@@ -230,7 +248,7 @@ const addSizeClasses = (id: string | null, isActive = false) => {
   }
    else {
     const gridItems = document.querySelectorAll(".project");
-    gridItems.forEach((item) => {
+    gridItems.forEach((item, index) => {
       const image = item.querySelector("img");
 
       image?.addEventListener("load", function () {
@@ -239,6 +257,16 @@ const addSizeClasses = (id: string | null, isActive = false) => {
 
       if (image?.complete) {
         setImageOrientation(image, item, isActive);
+      }
+
+      if (index === 0) {
+        image?.addEventListener("load", function () {
+          setImageOrientation(image, item, true);
+        });
+
+        if (image?.complete) {
+          setImageOrientation(image, item, true);
+        }
       }
     });
   }
@@ -257,12 +285,12 @@ const setMarginsRandomly = () => {
 }
 
 const typeGreetingWithCallback = (cb: () => void) => {
-  typer("#generic-text", SPEED)
+  typer("#generic-text", greetingSpeed)
     .line("Hey there!")
-    .pause(500)
+    .pause(400)
     .back("all", 40)
     .line("Exploring the beauty that others have condemned.")
-    .pause(300)
+    .pause(200)
     .back("all", 40)
     .run(cb);
 }
@@ -275,7 +303,7 @@ const typeRecursive = (i = 0) => {
     return;
   }
 
-  const typerino = typer(elementsToType.value[i], SPEED);
+  const typerino = typer(elementsToType.value[i], greetingSpeed);
   const toBeTyped = elementsToType.value[i].getAttribute("data-toBeTyped");
 
   typerino.line(toBeTyped);
@@ -294,10 +322,10 @@ const typeGreeting = () => {
 
 const fetchProjects = async () => {
   projects.value = await getProjects();
-  console.log(projects.value.items)
+
   projects.value.items = _orderBy(
     projects.value.items,
-    (item) => item.sys.createdAt,
+    (item) => item.sys.createdAt, 'desc'
   );
 
   if (!isPhone()) {
@@ -314,6 +342,7 @@ const closeIndex = () => {
 onMounted(() => {
   fetchProjects()
   typeGreeting();
+  window.addEventListener('click', handleClickOutside);
 });
 
 </script>

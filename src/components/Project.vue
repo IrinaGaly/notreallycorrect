@@ -5,7 +5,7 @@
       :key="image.sys.id"
       @mouseleave="leaveImage"
     >
-    <Transition name="fade" mode="out-in">
+    <Transition name="fade" mode="out-in" class="image">
         <img
           v-if="index === currentIndex"
           :id="image.sys.id"
@@ -54,25 +54,21 @@ const hoverOver = (image: Image) => {
   emit('hover-over', image?.sys?.id, getImageDescription(image));
 };
 
-const onMouseleave = (event: any) => {
+const onMouseleave = () => {
   hovered.value = false;
   emit('mouseout');
 };
 
-const clickImage = (image: any) => {
-  setTimeout(() => {  currentIndex.value =
-    (currentIndex.value + 1) % props.project.fields.images.length;
-    emit('switch-img-in-project', image?.sys?.id || '');
-  }, 500);
-
-
+const clickImage = (image: Image) => {
+  currentIndex.value = (currentIndex.value + 1) % props.project.fields.images.length;
+  emit('switch-img-in-project', image?.sys?.id || '');
 };
 
-const getImageUrl = (image: any) =>
+const getImageUrl = (image: Image) =>
   props.asset?.find((asset: any) => asset.sys.id === image?.sys?.id)?.fields
     ?.file?.url || image;
 
-const getImageDescription = (image: any) =>
+const getImageDescription = (image: Image) =>
   props.asset?.find((asset: any) => asset.sys.id === image?.sys?.id)?.fields
     ?.title || '';
 
@@ -122,20 +118,6 @@ onMounted(() => {
   flex-direction: column;
   height: fit-content;
   width: 100%;
-}
-
-.image-wrapper {
-  /* position: absolute;
-  width: 100px;
-  height: 100px;
-  transition: transform 0.3s ease-in-out; */
-  width: 100%;
-  height: 100%;
-}
-
-.image {
-  position: relative;
-  transition: all 1500ms ease-in-out 0s;
 }
 
 .project__image {
