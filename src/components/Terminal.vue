@@ -57,13 +57,21 @@ const indexListOpened = ref(false);
 const emit = defineEmits(["open-index", "scroll-to-project"]);
 
 const indexList = () => {
-  indexListOpened.value = true;
+  toggleIdexList();
   emit('open-index');
+};
+
+const toggleIdexList = () => {
+  indexListOpened.value = !indexListOpened.value;
 };
 
 const goToProject = (project: any) => {
   emit('scroll-to-project', project.sys.id);
 };
+
+defineExpose({
+  toggleIdexList,
+})
 </script>
 
 <style scoped lang="scss">
