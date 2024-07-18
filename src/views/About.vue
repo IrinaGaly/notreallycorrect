@@ -1,11 +1,9 @@
 <template>
   <div
+    id="scrollContainer"
+    class="scroll-container"
     v-dragscroll
     @scroll="onScroll"
-    @mousedown="doSomethingStart"
-    @mousemove="doSomethingMove"
-    @mouseup="doSomethingEnd"
-    class="scroll-container"
   >
     <div class="container">
       <template v-if="!isPhone()">
@@ -25,15 +23,10 @@
             <Project
               :project="project"
               :asset="projects.includes.Asset"
-              @hover-over="
-                (message: string) =>
-                  overProject(message, getGlobalIndex(groupIndex, index))
-              "
-              @mouseout="returnVisibility(getGlobalIndex(groupIndex, index))"
-              @image-loaded="addSizeClasses(null)"
-              @switch-img-in-project="
-                addActiveClass(getGlobalIndex(groupIndex, index))
-              "
+              @hover-over="(id: string, message: string) => overProject(id, message)"
+              @mouseout="returnVisibility"
+              @image-loaded="(id: string) => imageLoaded(id)"
+              @switch-img-in-project="(id: string) => onImageChange(id)"
             />
           </li>
         </ul>
@@ -50,23 +43,14 @@
             <Project
               :project="project"
               :asset="projects.includes.Asset"
-              @hover-over="(message: string) => overProject(message, index)"
-              @mouseout="returnVisibility(index)"
+              @hover-over="(id: string, message: string) => overProject(id, message)"
+              @mouseout="returnVisibility"
               @image-loaded="addSizeClasses(null)"
-              @switch-img-in-project="addSizeClasses(null)"
+              @switch-img-in-project="(id: string) => onImageChange(id)"
             />
           </li>
         </ul>
       </template>
-      <!-- <ul ref="container" >
-        <template  v-for="(project, index) in projects.items">
-          <template v-if="index > 6">
-            <li  :key="index" :ref="`element-${index}`" class="project">
-              <Project  :project="project" :asset="projects.includes.Asset" @open-project="openProject" @hover-over="overProject(project, index)" @mouseout="returnVisibility(index)"/>
-            </li>
-          </template>
-        </template>
-      </ul> -->
     </div>
   </div>
 
@@ -77,53 +61,67 @@
     @open-index="openIndexList"
   >
     <template #content>
-      <div v-if="!indexListOpened" id="terminal"></div>
+      <nav v-if="!indexListOpened && !introTyped" id="generic-text" class="terminal__content">
+        <div id="name" data-toBeTyped="notreallycorrect." class="font-bold"></div>
+        <div data-toBeTyped="  "></div>
+        <div id="about-link" data-toBeTyped="about" class="cursor-pointer"></div>
+        <div data-toBeTyped=" | "></div>
+        <div id="index-toggle" data-toBeTyped="index" class="cursor-pointer"></div>
+        <div data-toBeTyped=" | "></div>
+        <a href="mailto:adam.zajacek@gmail.com" data-toBeTyped="email " class="terminal__link"></a>
+        <div data-toBeTyped=" | "></div>
+        <a href="https://instagram.com" data-toBeTyped="ig"  class="terminal__link"></a>
+      </nav>
+      <div v-else-if="!indexListOpened" id="terminal"></div>
     </template>
   </Terminal>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import typer from "typer-js";
 // @ts-ignore
 import Project from "@/components/Project";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Terminal from "@/components/Terminal";
-import router from "@/router";
+
 import _find from "lodash/find";
 import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
 import _orderBy from "lodash/orderBy";
 
-const spaceId = import.meta.env.VITE_SPACE_ID;
-const accessToken = import.meta.env.VITE_API_KEY;
-const contentTypeId = "projects";
-const isDragging = ref(false);
+import { randomMarginsLeft, randomMarginsTop, scrollElementIntoView, createController, processMessage, setImageOrientation, API_PROJECTS } from './utils';
+
 const introTyped = ref(false);
 const container = ref(null);
 const indexListOpened = ref(false);
-const elements = ref([]); // Your array of elements
 const isScrolling = ref();
 const projects = ref<any>([]);
 const projectsLocal = ref();
 const scrolling = ref(false);
+const elementsToType = ref();
+const SPEED = { min: 30, max: 50 };
+const chunkSizes = [2, 4, 3];
 
-const content = [
-  "Hey there!",
-  "Exploring beauty that others have condemned.",
-  "NotReallyCorrect | contact | index | ig",
-];
 
-const overProject = (message: string, index: number) => {
-  stopObserving();
+const onImageChange = (id: string) => {
+  addSizeClasses(id, true);
+  addSizeClasses(id);
+}
 
+const imageLoaded = (id: string) => {
+  addSizeClasses(id);
+  setMarginsRandomly();
+}
+
+const overProject = (id: string, message: string) => {
   if (!scrolling.value && !isPhone()) {
-    addActiveClass(index);
-    introTyped.value && handleHover(message ?? "", 50, 50);
+    addSizeClasses(id, true);
+    introTyped.value && handleHover(message ?? "", 50, 30);
   } else if (!scrolling.value && isPhone()) {
-    introTyped.value && handleHover(message ?? "", 50, 50);
+    introTyped.value && handleHover(message ?? "", 50, 30);
   }
 };
 
@@ -131,359 +129,105 @@ const openIndexList = () => {
   indexListOpened.value = true;
 };
 
-const addActiveClass = (index: number) => {
-  const gridItems = document.querySelectorAll(".project");
-
-  gridItems.forEach(async (item, itemIndex) => {
-    item.classList.remove("active-project--horizontal");
-      item.classList.remove("active-project--vertical");
-     
-    if (itemIndex === index) {
-      item.classList.remove("project--horizontal");
-      item.classList.remove("project--vertical");
-      await addSizeClasses(item, true);
-      await addSizeClasses(null);
-    }
-  });
-};
-
 const scrollToProjectById = (id: string) => {
-  const gridItems = document.querySelectorAll(".project");
-
-  gridItems.forEach((item, itemIndex) => {
-    item.classList.remove("active-project--horizontal");
-    item.classList.remove("active-project--vertical");
-  });
-
+  returnVisibility();
   const item = document.getElementById(id);
   if (item) {
-    addSizeClasses(item, true);
-    item.scrollIntoView({ behavior: "smooth" });
+    const imageId = item.querySelector('img')?.id ?? null;
+    addSizeClasses(imageId, true);
+    if (isPhone()) {
+      item.scrollIntoView({ behavior: 'smooth'});
+    } else {
+      scrollElementIntoView(item);
+    }
   }
 };
 
-const returnVisibility = (index: number) => {
+const returnVisibility = () => {
   const gridItems = document.querySelectorAll(".project");
-  gridItems.forEach((item, itemIndex) => {
+
+  gridItems.forEach((item) => {
     item.classList.remove("active-project--horizontal");
     item.classList.remove("active-project--vertical");
+    item.classList.remove("active-project--square");
   });
+
+  addSizeClasses(null);
 };
 
-const chunkedProjects = async () => {
-  const chunkSize = 4;
+const getChunkedProjects = async () => {
   const localProjects = await projects.value.items;
   const chunkedArray = [];
-  for (let i = 0; i < localProjects.length; i += chunkSize) {
-    chunkedArray.push(localProjects.slice(i, i + chunkSize));
+
+  let currentIndex = 0;
+  while (currentIndex < localProjects.length) {
+    for (let size of chunkSizes) {
+      if (currentIndex >= localProjects.length) break;
+
+      const chunk = localProjects.slice(currentIndex, currentIndex + size);
+      chunkedArray.push(chunk);
+
+      currentIndex += size;
+    }
   }
   projectsLocal.value = chunkedArray;
 };
 
-const getGlobalIndex = (groupIndex: number, indexInGroup: number) =>
-  groupIndex * 4 + indexInGroup;
-
-const projectsObserver = () => {
-  const gridItems = document.querySelectorAll(".project");
-  const html = document.querySelector("html");
-
-  const observerOptions = {
-    root: null, // viewport
-    rootMargin: "0px",
-    threshold: 0.1, // 10% of the element is visible
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        const target = entry.target as HTMLElement;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-        const scrollLeft = Math.round(html.scrollLeft);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-        const scrollTop = Math.round(html.scrollTop);
-
-        const innerWidth = Math.round(window.innerWidth);
-        const innerHeight = Math.round(window.innerHeight);
-
-        const scr_center_xy = [
-          scrollLeft + innerWidth / 2,
-          scrollTop + innerHeight / 2,
-        ];
-        const center_xy = [
-          target.offsetLeft + target.offsetWidth / 2,
-          target.offsetTop + target.offsetHeight / 2,
-        ];
-        const diff_to_center_xy = [
-          scr_center_xy[0] - center_xy[0],
-          scr_center_xy[1] - center_xy[1],
-        ];
-
-        const scale = 0.8 + Math.abs(entry.intersectionRatio) * 0.2;
-        target.style.filter = `blur(${1 - entry.intersectionRatio}px)`;
-        target.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${diff_to_center_xy[0] * 0.13}, ${diff_to_center_xy[1] * 0.13})`;
-      }
-    });
-  }, observerOptions);
-
-  const startObserving = (item: any) => {
-    observer.observe(item);
-  };
-
-  // Function to stop observing an item
-  const stopObserving = (item: any) => {
-    observer.unobserve(item);
-  };
-
-  // Attach event listeners to each grid item
-  gridItems.forEach((item) => {
-    startObserving(item);
-
-    // Mouseover event to stop observing hovered item
-    item.addEventListener("mousemove", () => {
-      stopObserving(item);
-    });
-    item.addEventListener("mouseover", () => {
-      stopObserving(item);
-    });
-  });
-};
-
-const stopObserving = () => {
-  const gridItems = document.querySelectorAll(".project");
-  gridItems.forEach((item) => {
-    const element = item as HTMLElement;
-    element?.classList.remove("transition--active");
-    //element.style.transform = "none";
-  });
-};
-
 const onScroll = () => {
-  //projectsObserver();
   window.clearTimeout(isScrolling.value);
   scrolling.value = true;
-  //removeActiveClasses();
 
   isScrolling.value = setTimeout(() => {
-    stopObserving();
     scrolling.value = false;
-    console.log("Scrolling has stopped.");
   });
 };
 
-const isPhone = () => {
-  return window.matchMedia("only screen and (max-width: 768px)").matches;
-};
+const isPhone = () => window.matchMedia("only screen and (max-width: 768px)").matches;
 
-// const openProject = (message: string) => {
-//   //router.push({ name: "Projects" });
-//   handleHover(message, 50, 50);
-// };
-
-const fetchElements = () => {
-  elements.value = Array.from(document.querySelectorAll(".project"));
-};
-const getProjects = async () => {
-  return await axios
-    .get(
-      `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${contentTypeId}&access_token=${accessToken}`,
-    )
-    .then((response) => {
-      return response.data;
-    });
-};
-
-const doSomethingMove = (event: any) => {
-  isDragging.value && fetchElements();
-};
-
-const doSomethingStart = () => {
-  isDragging.value = true;
-};
-
-const doSomethingEnd = () => {
-  isDragging.value = false;
-};
-
-const typeAndRemoveMessage = (
-  message: any,
-  typingTimeout: any,
-  removingTimeout: any,
-  index: any,
-) => {
-  return new Promise((resolve) => {
-    // Typing text
-    const typePromises = typingPromises(message, typingTimeout);
-    typePromises.forEach((promise, i, arr) => {
-      promise.then((portion) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-        document.querySelector("#terminal").innerHTML = portion;
-        if (i === arr.length - 1) {
-          // Once typing is done, decide whether to start removing
-          if (index === 2) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-            setTimeout(() => resolve(), 500); // Delay before resolving
-            introTyped.value = true;
-          } else {
-            setTimeout(() => {
-              const removePromises = removingPromises(message, removingTimeout);
-              removePromises.forEach((remPromise, j, remArr) => {
-                remPromise.then((remPortion) => {
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-                  document.querySelector("#terminal").innerHTML = remPortion;
-                  if (j === remArr.length - 1) {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-                    resolve(); // Resolve the promise when removal is complete
-                  }
-                });
-              });
-            }, 500); // Delay before starting removal
-          }
-        }
-      });
-    });
+const getProjects = async () => await axios
+  .get(API_PROJECTS)
+  .then((response) => {
+    return response.data;
   });
-};
 
-const typingPromises = (message: any, timeout: any, signal = null) =>
-  [...message].map(
-    (ch, i) =>
-      new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-          resolve(message.substring(0, i + 1));
-        }, timeout * i);
-
-        signal &&
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-          signal.addEventListener("abort", () => {
-            clearTimeout(timeoutId);
-            reject(new Error("Aborted"));
-          });
-      }),
-  );
-
-const removingPromises = (message: any, timeout: any, signal = null) =>
-  [...message].map(
-    (ch, i) =>
-      new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-          resolve(message.substring(0, message.length - i - 1));
-        }, timeout * i);
-
-        signal &&
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-          signal.addEventListener("abort", () => {
-            clearTimeout(timeoutId);
-            reject(new Error("Aborted"));
-          });
-      }),
-  );
-
-let currentOperation = null;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-let controller = null;
-
-const typeMessage = (message: any, typingTimeout: any, signal = null) => {
-  return new Promise((resolve, reject) => {
-    const typePromises = typingPromises(message, typingTimeout, signal);
-    typePromises.forEach((promise, i, arr) => {
-      promise
-        .then((portion) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-          document.querySelector("#terminal").innerHTML = portion;
-          if (i === arr.length - 1) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-            resolve();
-          }
-        })
-        .catch(reject);
-    });
-  });
-};
-
-const removeMessage = (message: any, removingTimeout: any, signal: any) => {
-  return new Promise((resolve, reject) => {
-    const removePromises = removingPromises(message, removingTimeout, signal);
-    removePromises.forEach((promise, i, arr) => {
-      promise
-        .then((portion) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-          document.querySelector("#terminal").innerHTML = portion;
-          if (i === arr.length - 1) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-            resolve();
-          }
-        })
-        .catch(reject);
-    });
-  });
-};
-
-const handleHover = async (message: any, typeTimeout = 140, removeTimeout = 140) => {
+const handleHover = async (message: any, typeTimeout = 100, removeTimeout = 90) => {
   if (introTyped.value) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-    if (controller) {
-      controller.abort(); // Abort the current operation
-    }
-
-    controller = new AbortController();
-    const signal = controller.signal;
+    closeIndex();
+    const signal = createController();
 
     try {
-      if (document.querySelector("#terminal")?.innerHTML) {
-        await removeMessage(
-          document.querySelector("#terminal")?.innerHTML,
+      if (document?.querySelector("#terminal")?.innerHTML) {
+        await processMessage(
+          document?.querySelector("#terminal")?.innerHTML ?? '',
           removeTimeout,
           signal,
+          true,
         );
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-      await typeMessage(message, typeTimeout, signal);
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-      if (error.message !== "Aborted") {
+      await processMessage(message, typeTimeout, signal);
+    } catch (error: any) {
+      if (error?.message !== "Aborted") {
         console.error(error);
       }
     }
   }
 };
 
-const processMessages = async (messages: any, typingTimeout: any, removingTimeout: any) => {
-  for (let i = 0; i < messages.length; i++) {
-    await typeAndRemoveMessage(messages[i], typingTimeout, removingTimeout, i);
-  }
-};
-
-const elementsToType = ref();
-
-const addSizeClasses = (item: any, isActive = false) => {
-  if (item) {
-    const image = item.querySelector(".image");
-
-    image?.addEventListener("load", function () {
-      setImageOrientation(image, item, isActive);
-    });
-
-    // If the image is already loaded (cached)
-    if (image?.complete) {
-      setImageOrientation(image, item, isActive);
+const addSizeClasses = (id: string | null, isActive = false) => {
+  if (id) {
+    const image = document.getElementById(id);
+    const parentElement = image?.closest('li');
+    if (image && parentElement) {
+      image?.addEventListener("load", function () {
+        setImageOrientation(image as HTMLImageElement, parentElement, isActive);
+      });
     }
-  } else {
+    /* @ts-ignore */
+    if (image?.complete && parentElement) {
+      setImageOrientation(image as HTMLImageElement, parentElement, isActive);
+    }
+  }
+   else {
     const gridItems = document.querySelectorAll(".project");
     gridItems.forEach((item) => {
       const image = item.querySelector("img");
@@ -492,75 +236,85 @@ const addSizeClasses = (item: any, isActive = false) => {
         setImageOrientation(image, item, isActive);
       });
 
-      // If the image is already loaded (cached)
       if (image?.complete) {
         setImageOrientation(image, item, isActive);
       }
-
-      // // Ensure the image has loaded to access its natural dimensions
-      //     if (image?.naturalWidth > image.naturalHeight) {
-      //         // Image is horizontal
-      //         image.classList.add('horizontal-image');
-      //     } else {
-      //         // Image is vertical
-      //         image.classList.add('vertical-image');
-      //     }
     });
   }
 };
 
-const setImageOrientation = (
-  image: HTMLImageElement,
-  item: Element,
-  isActive: boolean,
-) => {
-  if (image.naturalWidth >= image.naturalHeight) {
-    // Image is horizontal
-    if (isActive) {
-      item.classList.add("active-project--horizontal");
-    } else {
-      item.classList.add("project--horizontal");
-    }
-  } else {
-    if (isActive) {
-      item.classList.add("active-project--vertical");
-    } else {
-      item.classList.add("project--vertical");
-    }
-    // Image is vertical
+const setMarginsRandomly = () => {
+  const gridItems = document.querySelectorAll(".project");
+
+  gridItems.forEach((item: any, index: number) => {
+      const marginTop = `${randomMarginsTop[index]}%`;
+      const marginLeft = `${randomMarginsLeft[index + 1]}%`;
+
+      item.style.marginTop = marginTop;
+      item.style.marginLeft = marginLeft;
+  });
+}
+
+const typeGreetingWithCallback = (cb: () => void) => {
+  typer("#generic-text", SPEED)
+    .line("Hey there!")
+    .pause(500)
+    .back("all", 40)
+    .line("Exploring the beauty that others have condemned.")
+    .pause(300)
+    .back("all", 40)
+    .run(cb);
+}
+
+const typeRecursive = (i = 0) => {
+  if (i === elementsToType.value.length) {
+    setTimeout(() => {
+      introTyped.value = true;
+    }, 900);
+    return;
   }
-};
-onMounted(async () => {
+
+  const typerino = typer(elementsToType.value[i], SPEED);
+  const toBeTyped = elementsToType.value[i].getAttribute("data-toBeTyped");
+
+  typerino.line(toBeTyped);
+
+  setTimeout(() => {
+    typeRecursive(i + 1);
+  }, 75 * toBeTyped.length);
+}
+
+const typeGreeting = () => {
+  elementsToType.value = document.querySelectorAll("nav > *");
+  typeGreetingWithCallback(() => {
+    typeRecursive();
+  });
+}
+
+const fetchProjects = async () => {
   projects.value = await getProjects();
+  console.log(projects.value.items)
   projects.value.items = _orderBy(
     projects.value.items,
-    (item) => item.sys.updatedAt,
+    (item) => item.sys.createdAt,
   );
-  // projectsObserver()
-  elementsToType.value = document.querySelectorAll("nav > *");
-  processMessages(content, 50, 50);
+
   if (!isPhone()) {
-    chunkedProjects();
+    getChunkedProjects();
   } else {
     projectsLocal.value = await projects.value.items;
   }
-  //addSizeClasses();
+}
 
-  // document.addEventListener("DOMContentLoaded", function() {
-  //       const items = document.querySelectorAll('.project');
+const closeIndex = () => {
+  indexListOpened.value = false;
+}
 
-  //       items.forEach(item => {
-  //           item.addEventListener('mouseover', function() {
-  //               item.scrollIntoView({
-  //                   behavior: 'smooth',
-  //                   block: 'center'
-  //               });
-  //           });
-  //       });
-  //   });
+onMounted(() => {
+  fetchProjects()
+  typeGreeting();
 });
 
-// window.addEventListener("scroll", () => projectsObserver());
 </script>
 
 <style lang="scss">
@@ -571,6 +325,7 @@ body {
   cursor: grab;
   background: black;
   font-family: "Fira Code", monospace;
+  font-size: 15px;
 }
 
 img {
@@ -579,21 +334,19 @@ img {
   object-fit: contain;
 }
 
+.terminal__content {
+  display: flex;
+}
+
+.terminal__link {
+  color: white;
+  font-weight: normal;
+}
+
 #app {
   width: 100%;
   height: 100%;
   background: black;
-}
-
-.container {
-  // width: 150%;
-  // height: 100%;
-  // display: flex;
-  // align-items: center;
-  // flex-wrap: wrap;
-  // padding: 10%;
-  // padding-left: 30%;
-  // padding-right: 50%;
 }
 
 .grid-container {
@@ -607,43 +360,38 @@ img {
 }
 
 .project--horizontal {
+  max-width: 25vw;
   min-width: 25vw;
 }
 
 .project--vertical {
   min-width: 15vw;
-  //max-height: 70vh;
+  max-width: 15vw;
+}
+
+.project--square {
+  max-width: 20vw;
+  min-width: 20vw;
 }
 
 .project {
-  //position: relative;
   overflow: hidden;
-  //display: flex;
-  //width: 15vw;
-  // min-width: 15vw;
   width: 100%;
-  //box-sizing: border-box;
-  //max-height: 30vh;
   list-style-type: none;
-  //float: left;
-  margin: 5%;
+  margin: 1%;
   transition: all 1500ms ease-in-out 0s;
+}
 
-  &:hover {
-    // min-width: 35vw;
-    // //height: 50vh;
-    // min-height: 30vh;
+.font-bold {
+  font-weight: bold;
+}
 
-    // padding: 5%;
-    // margin: 10%;
-    // transform: scale(5);
-  }
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .scroll-container {
-  padding-right: 10%;
   display: inline-block;
-  padding: 10% 15%;
 }
 
 .start-transition {
@@ -687,14 +435,10 @@ img {
 }
 
 .list {
-  position: relative;
-  // margin: 0;
-  // padding: 0;
-  // display: flex;
-  // width: 100%;
-  // min-width: fit-content;
   display: inline-flex;
-  // margin-left: 10%;
+  position: relative;
+  width: 100%;
+  min-width: fit-content;
 }
 
 .list-phone {
@@ -707,88 +451,22 @@ img {
   min-width: fit-content;
 }
 
-.list:nth-child(odd) {
-  margin-right: 10%;
-  .project {
-    //margin: 20%;
-  }
-  .project:nth-child(even) {
-    margin-top: 5%;
-    //  &:hover {
-    //   margin: 0;
-    //  }
-  }
-  .project:nth-child(odd) {
-    margin-bottom: 8%;
-    margin-left: 5%;
-    margin-top: 10%;
-
-    // &:hover {
-    //   margin: 0;
-    //  }
-  }
-  .project:last-child {
-    // margin-right: 25%;
-    // padding-right: 10%;
-  }
-}
-
-.list:nth-child(even) {
-  margin-right: 10%;
-  .project:nth-child(2) {
-    margin-right: 15%;
-    margin-top: 5%;
-    // &:hover {
-    //   margin: 0;
-    // }
-  }
-  .project:nth-child(1) {
-    margin-left: 15%;
-    // &:hover {
-    //   margin: 0;
-    // }
-  }
-  .project:last-child {
-    // tut chtoby otstub byl s
-    // margin-right: 15%;
-     padding-right: 10%;
-    // &:hover {
-    //   //margin-right: 30%;
-    //  }
-  }
-}
-
-// .list:last-of-type {
-//   margin-bottom: 20%;
-// }
-
 .active-project--vertical {
-  min-width: 25vw;
-  //height: 50vh;
-  //max-height: 50vh;
-
-  // padding: 5%;
-  // margin: 20%;
-  padding-top: 5%;
+  min-width: 30vw;
 }
 
 .active-project--horizontal {
-  min-width: 40vw;
-  //height: 50vh;
-  //min-height: 30vh;
-
-  // padding: 5%;
-  // margin: 20%;
-  padding-top: 5%;
+  min-width: 45vw;
 }
 
-// .active-project--vertical:last-child {
-//   min-width: 35vw;
-// }
+.active-project--square {
+  min-width: 45vw;
+}
 
-// .active-project--horizontal:last-child {
-//   min-width: 45vw;
-// }
+.container {
+  width: max-content;
+  padding: 30%;
+}
 
 @media only screen and (max-width: 768px) {
   .container {
@@ -801,6 +479,8 @@ img {
     padding: 10%;
   }
   .project--horizontal {
+    max-width: 100%;
+    min-width: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -808,6 +488,17 @@ img {
   }
 
   .project--vertical {
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10%;
+  }
+
+  .project--square {
+    max-width: 100%;
+    min-width: 100%;
     width: 100%;
     margin: 0;
     padding: 0;

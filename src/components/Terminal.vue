@@ -1,10 +1,9 @@
-<!-- src/views/Home.vue -->
 <template>
   <div
     class="terminal fixed text-l z-30 flex text-sm flex-row items-center bottom-0 left-0"
   >
     <div v-if="introTyped" class="terminal__outdated">
-      <div id="name" class="font-bold">notreallycorrect.</div>
+      <div id="name" class="terminal-item">notreallycorrect.</div>
       <div data-toBeTyped="  "></div>
       <div id="about-link" data-toBeTyped="about" class="cursor-pointer">
         about 
@@ -25,9 +24,7 @@
       <a href="https://instagram.com" data-toBeTyped="ig"> ig</a>
     </div>
     <div
-      :class="
-        indexListOpened ? 'terminal__container--intro' : 'terminal__container'
-      "
+      class="terminal__container"
     >
       <template v-if="indexListOpened">
         <ul class="terminal__list">
@@ -36,7 +33,12 @@
             class="terminal__item"
             @click="goToProject(project)"
           >
-            {{ project.fields.title }}
+            <span class="terminal__item--title">
+              {{ project.fields.title }}
+            </span>
+            <span class="terminal__item--year">
+              {{ project.fields.year }}
+            </span>
           </li>
         </ul>
       </template>
@@ -55,16 +57,12 @@ const indexListOpened = ref(false);
 const emit = defineEmits(["open-index", "scroll-to-project"]);
 
 const indexList = () => {
-  //console.log("indexList");
   indexListOpened.value = true;
-  emit("open-index");
-
-  //console.log(indexListOpened.value, props.projects);
+  emit('open-index');
 };
 
 const goToProject = (project: any) => {
-  // console.log(project, "project");
-  emit("scroll-to-project", project.sys.id);
+  emit('scroll-to-project', project.sys.id);
 };
 </script>
 
@@ -92,6 +90,18 @@ const goToProject = (project: any) => {
 }
 
 .terminal__item {
+  display: flex;
+  justify-content: space-between;
+  .terminal__item--title {
+    flex: 1;
+    text-align: left;
+    margin-right: 6rem;
+  }
+  .terminal__item--year {
+    flex-shrink: 0;
+    text-align: right;
+    white-space: nowrap; 
+  }
   &:hover {
     cursor: pointer;
   }
@@ -108,7 +118,9 @@ const goToProject = (project: any) => {
   .terminal__list {
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
     li {
       text-decoration: none;
@@ -145,6 +157,11 @@ const goToProject = (project: any) => {
   margin-left: 0.5rem;
   margin-bottom: 0.3rem;
   animation: blink 1s linear infinite;
+}
+
+
+.terminal-item {
+  font-weight: bold;
 }
 
 @keyframes blink {
