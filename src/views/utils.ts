@@ -27,13 +27,13 @@ export function scrollElementIntoView(element: HTMLElement) {
 
   const targetRect = element.getBoundingClientRect();
 
-  const currentScrollLeft = scrollContainer?.scrollLeft ?? 0;
-  const currentScrollTop = scrollContainer?.scrollTop ?? 0;
+  const currentScrollLeft = scrollContainer?.scrollLeft || 0;
+  const currentScrollTop = scrollContainer?.scrollTop || 0;
 
-  const containerRectLeft = containerRect?.left ?? 0;
-  const containerRectWidth = containerRect?.width ?? 0;
-  const containerRectHeight = containerRect?.height ?? 0;
-  const containerRectTop = containerRect?.top ?? 0;
+  const containerRectLeft = containerRect?.left || 0;
+  const containerRectWidth = containerRect?.width || 0;
+  const containerRectHeight = containerRect?.height || 0;
+  const containerRectTop = containerRect?.top || 0;
 
   const scrollLeft =
     currentScrollLeft +

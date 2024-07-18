@@ -62,7 +62,7 @@ const onMouseleave = (event: any) => {
 const clickImage = (image: any) => {
   setTimeout(() => {  currentIndex.value =
     (currentIndex.value + 1) % props.project.fields.images.length;
-    emit('switch-img-in-project', image?.sys?.id ?? '');
+    emit('switch-img-in-project', image?.sys?.id || '');
   }, 500);
 
 
@@ -70,11 +70,11 @@ const clickImage = (image: any) => {
 
 const getImageUrl = (image: any) =>
   props.asset?.find((asset: any) => asset.sys.id === image?.sys?.id)?.fields
-    ?.file?.url ?? image;
+    ?.file?.url || image;
 
 const getImageDescription = (image: any) =>
   props.asset?.find((asset: any) => asset.sys.id === image?.sys?.id)?.fields
-    ?.title ?? '';
+    ?.title || '';
 
 onMounted(() => {
   emit('image-loaded', null);

@@ -55,6 +55,7 @@
   </div>
 
   <Terminal
+    ref="terminal"
     :intro-typed="introTyped"
     :projects="projects.items"
     @scroll-to-project="scrollToProjectById"
@@ -119,9 +120,9 @@ const imageLoaded = (id: string) => {
 const overProject = (id: string, message: string) => {
   if (!scrolling.value && !isPhone()) {
     addSizeClasses(id, true);
-    introTyped.value && handleHover(message ?? "", 50, 30);
+    introTyped.value && handleHover(message, 50, 30);
   } else if (!scrolling.value && isPhone()) {
-    introTyped.value && handleHover(message ?? "", 50, 30);
+    introTyped.value && handleHover(message, 50, 30);
   }
 };
 
@@ -133,7 +134,7 @@ const scrollToProjectById = (id: string) => {
   returnVisibility();
   const item = document.getElementById(id);
   if (item) {
-    const imageId = item.querySelector('img')?.id ?? null;
+    const imageId = item.querySelector('img')?.id || null;
     addSizeClasses(imageId, true);
     if (isPhone()) {
       item.scrollIntoView({ behavior: 'smooth'});
@@ -190,7 +191,7 @@ const getProjects = async () => await axios
     return response.data;
   });
 
-const handleHover = async (message: any, typeTimeout = 100, removeTimeout = 90) => {
+const handleHover = async (message: string, typeTimeout = 100, removeTimeout = 90) => {
   if (introTyped.value) {
     closeIndex();
     const signal = createController();
@@ -198,7 +199,7 @@ const handleHover = async (message: any, typeTimeout = 100, removeTimeout = 90) 
     try {
       if (document?.querySelector("#terminal")?.innerHTML) {
         await processMessage(
-          document?.querySelector("#terminal")?.innerHTML ?? '',
+          document?.querySelector("#terminal")?.innerHTML || '',
           removeTimeout,
           signal,
           true,
