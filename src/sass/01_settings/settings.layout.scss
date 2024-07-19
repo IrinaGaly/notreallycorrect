@@ -1,66 +1,26 @@
-//-------------------------------//
-//             LAYOUT            //
-//-------------------------------//
-// Global grid settings for 05_objects/objects.flex-grid.scss
+body {
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  background: black;
+  font-family: "Fira Code", monospace;
+  font-size: 15px;
+}
 
-$wrapper-padding-x--sm: 1rem;
-$wrapper-padding-x--md: 2rem;
-$wrapper-padding-x--lg: 3.875rem;
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 
-$grid-cols: 12;
-$grid-map: (
-  "": 0,
-  "-sm": "mobile",
-  "-md": "tablet",
-  "-lg": "screen",
-  "-xl": "largescreen",
-);
+a {
+  text-decoration: none;
+  color: whitesmoke;
+}
 
-$col-padding-x--sm: 0.625rem; //10px
-$col-padding-x--md: 1rem; //16px
-$col-padding-x--lg: 1.5rem; //24px
-$col-padding-x--xl: 1.5rem; //24px
-
-$col-width: 6.1rem;
-
-// Wrapper - Width based on cols & gaps width
-$wrapper-max-w--screen: calc(
-  (12 * #{$col-width}) + (12 * #{$col-padding-x--lg}) +
-    (2 * #{$wrapper-padding-x--lg})
-);
-$wrapper-max-w--largescreen: calc(
-  12 * #{$col-width} + 12 * #{$col-padding-x--xl} +
-    (2 * #{$wrapper-padding-x--lg})
-);
-
-// Header
-$header-h: 60px;
-$header-h--mobile: 60px;
-
-// Subnav
-$subnav-h: 90px;
-
-// Footer
-$footer-h: 80px;
-
-// Left side navigation
-$nav-max-w: 23.5rem;
-$nav-header-h: 112px;
-$nav-footer-h: 71px;
-// $nav-max-w--collapsed: 80px;
-
-// Wraper - Fluid
-$wrapper-w: calc(100% - #{$nav-max-w});
-
-// Drawer
-$drawer-w: 380px;
-
-// Stepper (SubNavigation)
-$steps-h: 114px;
-
-// Capabilities matrix
-$capabilities-matrix-header-column-w: 189px;
-$capabilities-matrix-header-column-sm-w: 140px;
-
-// Strategy room
-$key-messages-w: 344px;
+#app {
+  width: 100%;
+  height: 100%;
+  background: black;
+}

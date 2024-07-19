@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-container">
+  <div class="project__container">
     <template
       v-for="(image, index) in project?.fields?.images"
       :key="image.sys.id"
@@ -9,7 +9,7 @@
         <img
           v-if="index === currentIndex"
           :id="image.sys.id"
-          :class="{ cursor: project.fields.images?.length > 1 }"
+          :class="{ cursorPointer: project.fields.images?.length > 1 }"
           v-lazy="`${getImageUrl(project.fields.images[currentIndex])}`"
           @mouseover="hoverOver(image)"
           @mouseleave="onMouseleave"
@@ -76,92 +76,3 @@ onMounted(() => {
   emit('image-loaded', null);
 });
 </script>
-
-<style lang="scss">
- .fade-enter-active, .fade-leave-active {
-    animation: fadeAnimation 0.9s;
-  }
-  .fade-leave-active {
-    display: none;
-  }
-  @keyframes fadeAnimation {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-#container {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  position: relative;
-}
-.scroll-container {
-  width: 100vw;
-  height: 100vh;
-  overflow: scroll;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.scroll-content {
-  position: relative;
-  width: 200vw;
-  height: 200vh;
-}
-
-.flex-container {
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  width: 100%;
-}
-
-.project__image {
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-// img {
-//   width: 100%;
-//   height: 100%;
-//   object-fit: cover;
-//   position: relative;
-// }
-
-// img.hovered {
-//   transform: scale(3);
-//   z-index: 10;
-// }
-
-.project__title {
-  // position: absolute;
-  // bottom: 0;
-  // left: 0;
-  color: white;
-  animation: showup 7s infinite;
-}
-
-@keyframes showup {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.cursor {
-  cursor: pointer;
-}
-</style>

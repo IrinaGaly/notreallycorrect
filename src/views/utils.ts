@@ -128,10 +128,10 @@ export function setImageOrientation(
 ) {
   if (image.naturalWidth > image.naturalHeight) {
     /* Image is horizontal */
-    if (isActive && !item.classList.contains("active-project--horizontal")) {
-      item.classList.remove("active-project--vertical");
-      item.classList.remove("active-project--square");
-      item.classList.add("active-project--horizontal");
+    if (isActive && !item.classList.contains("project__active--horizontal")) {
+      item.classList.remove("project__active--vertical");
+      item.classList.remove("project__active--square");
+      item.classList.add("project__active--horizontal");
     } else if (!item.classList.contains("project--horizontal")) {
       item.classList.remove("project--vertical");
       item.classList.remove("project--square");
@@ -139,10 +139,10 @@ export function setImageOrientation(
     }
   } else if (image.naturalWidth < image.naturalHeight) {
     /* Image is vertical */
-    if (isActive && !item.classList.contains("active-project--vertical")) {
-      item.classList.remove("active-project--horizontal");
-      item.classList.remove("active-project--square");
-      item.classList.add("active-project--vertical");
+    if (isActive && !item.classList.contains("project__active--vertical")) {
+      item.classList.remove("project__active--horizontal");
+      item.classList.remove("project__active--square");
+      item.classList.add("project__active--vertical");
     } else if (!item.classList.contains("project--vertical")) {
       item.classList.remove("project--horizontal");
       item.classList.remove("project--square");
@@ -150,10 +150,10 @@ export function setImageOrientation(
     }
   } else {
     /* Image is square */
-    if (isActive && !item.classList.contains("active-project--square")) {
-      item.classList.remove("active-project--vertical");
-      item.classList.remove("active-project--horizontal");
-      item.classList.add("active-project--square");
+    if (isActive && !item.classList.contains("project__active--square")) {
+      item.classList.remove("project__active--vertical");
+      item.classList.remove("project__active--horizontal");
+      item.classList.add("project__active--square");
     } else if (!item.classList.contains("project--square")) {
       item.classList.remove("project--vertical");
       item.classList.remove("project--horizontal");

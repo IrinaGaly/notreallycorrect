@@ -11,12 +11,11 @@
           v-for="(group, groupIndex) in projectsLocal"
           :key="groupIndex"
           ref="container"
-          class="list"
+          class="project__list"
         >
           <li
             v-for="(project, index) in group"
             :key="`project-${index}`"
-            :ref="`element-${groupIndex}-${index}`"
             :id="project.sys.id"
             class="project"
           >
@@ -32,7 +31,7 @@
         </ul>
       </template>
       <template v-else>
-        <ul ref="container" class="list-phone">
+        <ul ref="container" class="project__list--phone">
           <li
             v-for="(project, index) in projectsLocal"
             :key="`project-${index}`"
@@ -166,9 +165,9 @@ const returnVisibility = () => {
   const gridItems = document.querySelectorAll(".project");
 
   gridItems.forEach((item) => {
-    item.classList.remove("active-project--horizontal");
-    item.classList.remove("active-project--vertical");
-    item.classList.remove("active-project--square");
+    item.classList.remove("project__active--horizontal");
+    item.classList.remove("project__active--vertical");
+    item.classList.remove("project__active--square");
   });
 
   addSizeClasses(null);
@@ -346,197 +345,3 @@ onMounted(() => {
 });
 
 </script>
-
-<style lang="scss">
-body {
-  overflow: scroll;
-  width: 100%;
-  height: 100%;
-  cursor: grab;
-  background: black;
-  font-family: "Fira Code", monospace;
-  font-size: 15px;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.terminal__content {
-  display: flex;
-}
-
-.terminal__link {
-  color: white;
-  font-weight: normal;
-}
-
-#app {
-  width: 100%;
-  height: 100%;
-  background: black;
-}
-
-.grid-container {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(6, 60vh);
-  grid-template-rows: repeat(6, 70vh);
-  gap: 10%;
-  position: relative;
-}
-
-.project--horizontal {
-  max-width: 25vw;
-  min-width: 25vw;
-}
-
-.project--vertical {
-  min-width: 15vw;
-  max-width: 15vw;
-}
-
-.project--square {
-  max-width: 20vw;
-  min-width: 20vw;
-}
-
-.project {
-  overflow: hidden;
-  width: 100%;
-  list-style-type: none;
-  margin: 1%;
-  transition: all 1500ms ease-in-out 0s;
-}
-
-.font-bold {
-  font-weight: bold;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.scroll-container {
-  display: inline-block;
-}
-
-.start-transition {
-  transform: scale(1.2);
-  transition: all 1s ease-out;
-}
-
-.in-view {
-  animation: pulseAnimation 5s infinite ease-in-out;
-}
-
-.transition--active {
-  transition: all 1s ease-out 0s;
-}
-
-@keyframes pulseAnimation {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  0% {
-    transform: scale(1);
-  }
-}
-.flex {
-  display: flex;
-}
-
-.wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 30%;
-}
-
-.list {
-  display: inline-flex;
-  position: relative;
-  width: 100%;
-  min-width: fit-content;
-}
-
-.list-phone {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: fit-content;
-}
-
-.active-project--vertical {
-  min-width: 30vw;
-}
-
-.active-project--horizontal {
-  min-width: 45vw;
-}
-
-.active-project--square {
-  min-width: 45vw;
-}
-
-.container {
-  width: max-content;
-  padding: 30%;
-}
-
-@media only screen and (max-width: 768px) {
-  .container {
-    width: 100%;
-    padding: 10%;
-    display: inline;
-  }
-
-  .scroll-container {
-    padding: 10%;
-  }
-  .project--horizontal {
-    max-width: 100%;
-    min-width: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    margin-bottom: 10%;
-  }
-
-  .project--vertical {
-    max-width: 100%;
-    min-width: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    margin-bottom: 10%;
-  }
-
-  .project--square {
-    max-width: 100%;
-    min-width: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    margin-bottom: 10%;
-  }
-
-  .project:last-of-type {
-    margin-bottom: 30%;
-  }
-}
-</style>
