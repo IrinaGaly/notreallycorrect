@@ -4,7 +4,8 @@
     class="scroll-container"
     v-dragscroll
     @scroll="onScroll"
-    @mousedown="startScroll"
+    @mousedown="startDrag"
+    @mouseup="endDrag"
   >
     <div class="container">
       <template v-if="!isPhone()">
@@ -143,6 +144,7 @@ const indexListOpened = ref(false);
 const projects = ref<any>([]);
 const projectsLocal = ref();
 const scrolling = ref(false);
+const dragging = ref(false);
 const elementsToType = ref();
 const greetingSpeed = { min: 30, max: 50 };
 const terminal = ref<TerminalType | null>(null);
@@ -233,14 +235,19 @@ const getChunkedProjects = async () => {
   projectsLocal.value = chunkedArray;
 };
 
-const startScroll = () => {
-  scrolling.value = true;
+const startDrag = () => {
+  dragging.value = true;
+}
+
+const endDrag= () => {
+  dragging.value = false;
 }
 
 const onScroll = () => {
   scrolling.value = true;
   setTimeout(() => {
     scrolling.value = false;
+    dragging.value = false;
   });
 };
 
