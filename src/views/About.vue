@@ -4,6 +4,7 @@
     class="scroll-container"
     v-dragscroll
     @scroll="onScroll"
+    @mousedown="startScroll"
   >
     <div class="container">
       <template v-if="!isPhone()">
@@ -22,7 +23,9 @@
             <Project
               :project="project"
               :asset="projects.includes.Asset"
-              @hover-over="(id: string, message: string) => overProject(id, message)"
+              @hover-over="
+                (id: string, message: string) => overProject(id, message)
+              "
               @mouseout="returnVisibility"
               @image-loaded="(id: string) => imageLoaded(id)"
               @switch-img-in-project="(id: string) => onImageChange(id)"
@@ -42,7 +45,9 @@
             <Project
               :project="project"
               :asset="projects.includes.Asset"
-              @hover-over="(id: string, message: string) => overProject(id, message)"
+              @hover-over="
+                (id: string, message: string) => overProject(id, message)
+              "
               @mouseout="returnVisibility"
               @image-loaded="addSizeClasses(null)"
               @switch-img-in-project="(id: string) => onImageChange(id)"
@@ -57,20 +62,44 @@
     ref="terminal"
     :intro-typed="introTyped"
     :projects="projects.items"
-    @scroll-to-project="scrollToProjectById"
+    @scroll-to-project="scrollTo"
     @open-index="openIndexList"
   >
     <template #content>
-      <nav v-if="!indexListOpened && !introTyped" id="generic-text" class="terminal__content">
-        <div id="name" data-toBeTyped="notreallycorrect." class="font-bold"></div>
+      <nav
+        v-if="!indexListOpened && !introTyped"
+        id="generic-text"
+        class="terminal__content"
+      >
+        <div
+          id="name"
+          data-toBeTyped="notreallycorrect."
+          class="font-bold"
+        ></div>
         <div data-toBeTyped="  "></div>
-        <div id="about-link" data-toBeTyped="about" class="cursor-pointer"></div>
+        <div
+          id="about-link"
+          data-toBeTyped="about"
+          class="cursor-pointer"
+        ></div>
         <div data-toBeTyped=" | "></div>
-        <div id="index-toggle" data-toBeTyped="index" class="cursor-pointer"></div>
+        <div
+          id="index-toggle"
+          data-toBeTyped="index"
+          class="cursor-pointer"
+        ></div>
         <div data-toBeTyped=" | "></div>
-        <a href="mailto:adam.zajacek@gmail.com" data-toBeTyped="email " class="terminal__link"></a>
+        <a
+          href="mailto:adam.zajacek@gmail.com"
+          data-toBeTyped="email "
+          class="terminal__link"
+        ></a>
         <div data-toBeTyped=" | "></div>
-        <a href="https://instagram.com" data-toBeTyped="ig"  class="terminal__link"></a>
+        <a
+          href="https://instagram.com"
+          data-toBeTyped="ig"
+          class="terminal__link"
+        ></a>
       </nav>
       <div v-else-if="!indexListOpened" id="terminal"></div>
     </template>
@@ -92,7 +121,17 @@ import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
 import _orderBy from "lodash/orderBy";
 
-import { randomMarginsLeft, randomMarginsTop, scrollElementIntoView, createController, processMessage, setImageOrientation, API_PROJECTS } from './utils';
+import {
+  randomMarginsLeft,
+  randomMarginsTop,
+  scrollElementIntoView,
+  createController,
+  processMessage,
+  setImageOrientation,
+  API_PROJECTS,
+  removeActiveClasses,
+  chunkSizes,
+} from "./utils";
 
 export interface TerminalType {
   closeIndexList: () => void;
@@ -101,24 +140,22 @@ export interface TerminalType {
 const introTyped = ref(false);
 const container = ref(null);
 const indexListOpened = ref(false);
-const isScrolling = ref();
 const projects = ref<any>([]);
 const projectsLocal = ref();
 const scrolling = ref(false);
 const elementsToType = ref();
 const greetingSpeed = { min: 30, max: 50 };
-const chunkSizes = [2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3];
 const terminal = ref<TerminalType | null>(null);
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
     event.target instanceof Element &&
-    !event.target.classList.contains('terminal__outdated') &&
-    !event.target.classList.contains('terminal__list') &&
-    !event.target.classList.contains('terminal__item') &&
-    !event.target.classList.contains('terminal__item--title') &&
-    !event.target.classList.contains('terminal__item--year') &&
-    !event.target.classList.contains('index-toggle')
+    !event.target.classList.contains("terminal__outdated") &&
+    !event.target.classList.contains("terminal__list") &&
+    !event.target.classList.contains("terminal__item") &&
+    !event.target.classList.contains("terminal__item--title") &&
+    !event.target.classList.contains("terminal__item--year") &&
+    !event.target.classList.contains("index-toggle")
   ) {
     terminal?.value?.closeIndexList();
   }
@@ -127,12 +164,12 @@ const handleClickOutside = (event: MouseEvent) => {
 const onImageChange = (id: string) => {
   addSizeClasses(id, true);
   addSizeClasses(id);
-}
+};
 
 const imageLoaded = (id: string) => {
   addSizeClasses(id);
   setMarginsRandomly();
-}
+};
 
 const overProject = (id: string, message: string) => {
   if (!scrolling.value && !isPhone()) {
@@ -151,26 +188,31 @@ const scrollToProjectById = (id: string) => {
   returnVisibility();
   const item = document.getElementById(id);
   if (item) {
-    const imageId = item.querySelector('img')?.id || null;
+    const imageId = item.querySelector("img")?.id || null;
     addSizeClasses(imageId, true);
     if (isPhone()) {
-      item.scrollIntoView({ behavior: 'smooth'});
+      item.scrollIntoView({ behavior: "smooth" });
     } else {
       scrollElementIntoView(item);
     }
   }
 };
 
+const scrollTo = (id: string) => {
+  scrollToProjectById(id);
+  setTimeout(() =>  scrollToProjectById(id), 1200);
+}
+
 const returnVisibility = () => {
-  const gridItems = document.querySelectorAll(".project");
+  if (!scrolling.value) {
+    const gridItems = document.querySelectorAll(".project");
 
-  gridItems.forEach((item) => {
-    item.classList.remove("project__active--horizontal");
-    item.classList.remove("project__active--vertical");
-    item.classList.remove("project__active--square");
-  });
+    gridItems.forEach((item) => {
+      removeActiveClasses(item);
+    });
 
-  addSizeClasses(null);
+    addSizeClasses(null);
+  }
 };
 
 const getChunkedProjects = async () => {
@@ -191,24 +233,30 @@ const getChunkedProjects = async () => {
   projectsLocal.value = chunkedArray;
 };
 
-const onScroll = () => {
-  window.clearTimeout(isScrolling.value);
+const startScroll = () => {
   scrolling.value = true;
+}
 
-  isScrolling.value = setTimeout(() => {
+const onScroll = () => {
+  scrolling.value = true;
+  setTimeout(() => {
     scrolling.value = false;
   });
 };
 
-const isPhone = () => window.matchMedia("only screen and (max-width: 768px)").matches;
+const isPhone = () =>
+  window.matchMedia("only screen and (max-width: 768px)").matches;
 
-const getProjects = async () => await axios
-  .get(API_PROJECTS)
-  .then((response) => {
+const getProjects = async () =>
+  await axios.get(API_PROJECTS).then((response) => {
     return response.data;
   });
 
-const handleHover = async (message: string, typeTimeout = 100, removeTimeout = 90) => {
+const handleHover = async (
+  message: string,
+  typeTimeout = 100,
+  removeTimeout = 90,
+) => {
   if (introTyped.value) {
     closeIndex();
     const signal = createController();
@@ -216,7 +264,7 @@ const handleHover = async (message: string, typeTimeout = 100, removeTimeout = 9
     try {
       if (document?.querySelector("#terminal")?.innerHTML) {
         await processMessage(
-          document?.querySelector("#terminal")?.innerHTML || '',
+          document?.querySelector("#terminal")?.innerHTML || "",
           removeTimeout,
           signal,
           true,
@@ -234,7 +282,7 @@ const handleHover = async (message: string, typeTimeout = 100, removeTimeout = 9
 const addSizeClasses = (id: string | null, isActive = false) => {
   if (id) {
     const image = document.getElementById(id);
-    const parentElement = image?.closest('li');
+    const parentElement = image?.closest("li");
     if (image && parentElement) {
       image?.addEventListener("load", function () {
         setImageOrientation(image as HTMLImageElement, parentElement, isActive);
@@ -244,8 +292,7 @@ const addSizeClasses = (id: string | null, isActive = false) => {
     if (image?.complete && parentElement) {
       setImageOrientation(image as HTMLImageElement, parentElement, isActive);
     }
-  }
-   else {
+  } else {
     const gridItems = document.querySelectorAll(".project");
     gridItems.forEach((item, index) => {
       const image = item.querySelector("img");
@@ -275,13 +322,13 @@ const setMarginsRandomly = () => {
   const gridItems = document.querySelectorAll(".project");
 
   gridItems.forEach((item: any, index: number) => {
-      const marginTop = `${randomMarginsTop[index]}%`;
-      const marginLeft = `${randomMarginsLeft[index + 1]}%`;
+    const marginTop = `${randomMarginsTop[index]}%`;
+    const marginLeft = `${randomMarginsLeft[index + 1]}%`;
 
-      item.style.marginTop = marginTop;
-      item.style.marginLeft = marginLeft;
+    item.style.marginTop = marginTop;
+    item.style.marginLeft = marginLeft;
   });
-}
+};
 
 const typeGreetingWithCallback = (cb: () => void) => {
   typer("#generic-text", greetingSpeed)
@@ -292,7 +339,7 @@ const typeGreetingWithCallback = (cb: () => void) => {
     .pause(200)
     .back("all", 40)
     .run(cb);
-}
+};
 
 const typeRecursive = (i = 0) => {
   if (i === elementsToType.value.length) {
@@ -310,21 +357,22 @@ const typeRecursive = (i = 0) => {
   setTimeout(() => {
     typeRecursive(i + 1);
   }, 75 * toBeTyped.length);
-}
+};
 
 const typeGreeting = () => {
   elementsToType.value = document.querySelectorAll("nav > *");
   typeGreetingWithCallback(() => {
     typeRecursive();
   });
-}
+};
 
 const fetchProjects = async () => {
   projects.value = await getProjects();
 
   projects.value.items = _orderBy(
     projects.value.items,
-    (item) => item.sys.createdAt, 'desc'
+    (item) => item.sys.createdAt,
+    "desc",
   );
 
   if (!isPhone()) {
@@ -332,16 +380,15 @@ const fetchProjects = async () => {
   } else {
     projectsLocal.value = await projects.value.items;
   }
-}
+};
 
 const closeIndex = () => {
   indexListOpened.value = false;
-}
+};
 
 onMounted(() => {
-  fetchProjects()
+  fetchProjects();
   typeGreeting();
-  window.addEventListener('click', handleClickOutside);
+  window.addEventListener("click", handleClickOutside);
 });
-
 </script>

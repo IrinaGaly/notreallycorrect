@@ -9,18 +9,16 @@
 <script setup lang="ts">
 import axios from "axios";
 import { ref, onMounted } from "vue";
-import { API_MAIN } from './utils';
+import { API_MAIN } from "./utils";
 
 const backgroundImage = ref({});
 
 const setBackground = async () => {
-  return await axios
-    .get(API_MAIN)
-    .then((response) => {
-      backgroundImage.value = {
-        backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
-      };
-    });
+  return await axios.get(API_MAIN).then((response) => {
+    backgroundImage.value = {
+      backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
+    };
+  });
 };
 
 onMounted(() => {

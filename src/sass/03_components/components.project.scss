@@ -14,21 +14,52 @@
 .project__title {
   color: white;
   animation: showup 7s infinite;
+  min-height: 2rem;
 }
 
-.project--horizontal {
+.project--horizontal-s {
+  max-width: 20vw;
+  min-width: 20vw;
+}
+
+.project--horizontal-m {
   max-width: 25vw;
   min-width: 25vw;
 }
 
-.project--vertical {
+.project--horizontal-l {
+  max-width: 30vw;
+  min-width: 30vw;
+}
+
+.project--vertical-s {
   min-width: 15vw;
   max-width: 15vw;
 }
 
-.project--square {
+.project--vertical-m {
+  min-width: 20vw;
+  max-width: 20vw;
+}
+
+.project--vertical-l {
+  min-width: 25vw;
+  max-width: 25vw;
+}
+
+.project--square-s {
+  max-width: 15vw;
+  min-width: 15vw;
+}
+
+.project--square-m {
   max-width: 20vw;
   min-width: 20vw;
+}
+
+.project--square-l {
+  max-width: 25vw;
+  min-width: 25vw;
 }
 
 .project {
@@ -56,16 +87,40 @@
   min-width: fit-content;
 }
 
-.project__active--vertical {
+.project__active--vertical-s {
   min-width: 30vw;
 }
 
-.project__active--horizontal {
+.project__active--horizontal-s {
+  min-width: 40vw;
+}
+
+.project__active--square-s {
+  min-width: 40vw;
+}
+
+.project__active--vertical-m {
+  min-width: 35vw;
+}
+
+.project__active--horizontal-m {
   min-width: 45vw;
 }
 
-.project__active--square {
+.project__active--square-m {
   min-width: 45vw;
+}
+
+.project__active--vertical-l {
+  min-width: 40vw;
+}
+
+.project__active--horizontal-l {
+  min-width: 50vw;
+}
+
+.project__active--square-l {
+  min-width: 50vw;
 }
 
 @keyframes showup {

@@ -23,9 +23,7 @@
       <div data-toBeTyped=" | ">|</div>
       <a href="https://instagram.com" data-toBeTyped="ig"> ig</a>
     </div>
-    <div
-      class="terminal__container"
-    >
+    <div class="terminal__container">
       <template v-if="indexListOpened">
         <ul class="terminal__list">
           <li
@@ -58,22 +56,22 @@ const emit = defineEmits(["open-index", "scroll-to-project"]);
 
 const indexList = () => {
   toggleIdexList();
-  emit('open-index');
+  emit("open-index");
 };
 
 const closeIndexList = () => {
   indexListOpened.value = false;
-}
+};
 
 const toggleIdexList = () => {
   indexListOpened.value = !indexListOpened.value;
 };
 
 const goToProject = (project: any) => {
-  emit('scroll-to-project', project.sys.id);
+  emit("scroll-to-project", project.sys.id);
 };
 
 defineExpose({
   closeIndexList,
-})
+});
 </script>

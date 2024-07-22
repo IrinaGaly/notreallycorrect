@@ -6,6 +6,10 @@ const mainContentTypeId = "main";
 export const API_PROJECTS = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${contentTypeId}&access_token=${accessToken}`;
 export const API_MAIN = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${mainContentTypeId}&access_token=${accessToken}`;
 
+export const chunkSizes = [
+  2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3,
+];
+
 export const randomMarginsLeft = [
   8, 5, 2, -3, 4, 1, 4, 8, 0, 8, 0, 1, 8, 5, 6, 3, 4, 6, 2, 1, 5, 2, 8, 2, 1, 5,
   4, 7, 6, 4, 0, 7, 6, 0, 4, 1, 8, 2, 6, 0, 6, 8, 2, 7, 0, 8, 7, 5, 3, 2, 6, 2,
@@ -14,11 +18,14 @@ export const randomMarginsLeft = [
 ];
 
 export const randomMarginsTop = [
-  2, 0, 0, 3, 8, 2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6,
-  -5, 3, 0, -3, 7, 1, 5, -4, 2, -1, 6, -2, 8, -3, 7, 5, -1, 6, 0, -4, 3, -2, 1,
-  4, -5, 7, -1, 3, 2, -4, 5, -3, 1, -2, 4, 8, -5, 6, -1, 2, -3, 5, 0, 3, -4, 7,
-  1, -2, 6, -5, 3, 2, -1, 4, 8, -4, 5, -2, 1, 7, 0, 6, -3, 8, 2, -1, 4, -5, 3,
-  6, 0, -4, 7,
+  // 2, 8, 0, 3, 8, -2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6,
+
+  2,
+  0, 0, 3, 8, 2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6, -5,
+  3, 0, -3, 7, 1, 5, -4, 2, -1, 6, -2, 8, -3, 7, 5, -1, 6, 0, -4, 3, -2, 1, 4,
+  -5, 7, -1, 3, 2, -4, 5, -3, 1, -2, 4, 8, -5, 6, -1, 2, -3, 5, 0, 3, -4, 7, 1,
+  -2, 6, -5, 3, 2, -1, 4, 8, -4, 5, -2, 1, 7, 0, 6, -3, 8, 2, -1, 4, -5, 3, 6,
+  0, -4, 7,
 ];
 
 export function scrollElementIntoView(element: HTMLElement) {
@@ -126,38 +133,59 @@ export function setImageOrientation(
   item: Element,
   isActive: boolean
 ) {
+  let sizeAttr = image.getAttribute("size")?.toLowerCase() ?? "s";
+
   if (image.naturalWidth > image.naturalHeight) {
     /* Image is horizontal */
-    if (isActive && !item.classList.contains("project__active--horizontal")) {
-      item.classList.remove("project__active--vertical");
-      item.classList.remove("project__active--square");
-      item.classList.add("project__active--horizontal");
-    } else if (!item.classList.contains("project--horizontal")) {
-      item.classList.remove("project--vertical");
-      item.classList.remove("project--square");
-      item.classList.add("project--horizontal");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--horizontal-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--vertical-${sizeAttr}`);
+      item.classList.remove(`project__active--square-${sizeAttr}`);
+      item.classList.add(`project__active--horizontal-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--horizontal-${sizeAttr}`)) {
+      item.classList.remove(`project--vertical-${sizeAttr}`);
+      item.classList.remove(`project--square-${sizeAttr}`);
+      item.classList.add(`project--horizontal-${sizeAttr}`);
     }
   } else if (image.naturalWidth < image.naturalHeight) {
     /* Image is vertical */
-    if (isActive && !item.classList.contains("project__active--vertical")) {
-      item.classList.remove("project__active--horizontal");
-      item.classList.remove("project__active--square");
-      item.classList.add("project__active--vertical");
-    } else if (!item.classList.contains("project--vertical")) {
-      item.classList.remove("project--horizontal");
-      item.classList.remove("project--square");
-      item.classList.add("project--vertical");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--vertical-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--horizontal-${sizeAttr}`);
+      item.classList.remove(`project__active--square-${sizeAttr}`);
+      item.classList.add(`project__active--vertical-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--vertical-${sizeAttr}`)) {
+      item.classList.remove(`project--horizontal-${sizeAttr}`);
+      item.classList.remove(`project--square-${sizeAttr}`);
+      item.classList.add(`project--vertical-${sizeAttr}`);
     }
   } else {
     /* Image is square */
-    if (isActive && !item.classList.contains("project__active--square")) {
-      item.classList.remove("project__active--vertical");
-      item.classList.remove("project__active--horizontal");
-      item.classList.add("project__active--square");
-    } else if (!item.classList.contains("project--square")) {
-      item.classList.remove("project--vertical");
-      item.classList.remove("project--horizontal");
-      item.classList.add("project--square");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--square-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--vertical-${sizeAttr}`);
+      item.classList.remove(`project__active--horizontal-${sizeAttr}`);
+      item.classList.add(`project__active--square-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--square-${sizeAttr}`)) {
+      item.classList.remove(`project--vertical-${sizeAttr}`);
+      item.classList.remove(`project--horizontal-${sizeAttr}`);
+      item.classList.add(`project--square-${sizeAttr}`);
     }
   }
+}
+
+export function removeActiveClasses(element: Element) {
+  const classes = Array.from(element.classList);
+
+  classes.forEach((className) => {
+    if (className.startsWith("project__active--")) {
+      element.classList.remove(className);
+    }
+  });
 }
