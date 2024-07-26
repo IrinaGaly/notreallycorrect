@@ -174,4 +174,36 @@
   .project:last-of-type {
     margin-bottom: 30%;
   }
+
+  .project__container {
+    padding: 10%;
+  }
+}
+
+.project-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.project-container li {
+  position: absolute;
+  transition: all 0.5s ease;
+}
+
+.project__list--phone {
+  width: 100%;
+  height: 100%;
+}
+
+.project-container .current {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.random.project {
+  width: 30vw;
 }

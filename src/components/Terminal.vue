@@ -1,10 +1,10 @@
 <template>
   <div
-    class="terminal fixed text-l z-30 flex text-sm flex-row items-center bottom-0 left-0"
+    class="terminal"
   >
     <div v-if="introTyped" class="terminal__outdated">
       <div id="name" class="font-bold">notreallycorrect.</div>
-      <div data-toBeTyped="  "></div>
+      <div data-toBeTyped="  ">&nbsp;</div>
       <div id="about-link" data-toBeTyped="about" class="cursor-pointer">
         about 
       </div>

@@ -8,6 +8,7 @@
   margin: 2rem;
   width: fit-content;
   padding: 0.4rem 1rem;
+  z-index: 100;
 }
 
 .terminal__content {
@@ -120,5 +121,40 @@
 
   100% {
     opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .terminal {
+    min-height: 2rem;
+    height: fit-content;
+    top: 7%;
+    max-width: 100%;
+    max-height: 18vh;
+  }
+
+  .terminal__outdated {
+    font-size: 0.8rem;
+    z-index: 200;
+  }
+
+  .terminal__container {
+    min-width: unset;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 16vh;
+  }
+
+  .terminal__list {
+    max-height: 16vh;
+  }
+
+  .terminal__content {
+    flex-wrap: wrap;
+  }
+
+  .terminal__container::-webkit-scrollbar {
+    display: none;
   }
 }

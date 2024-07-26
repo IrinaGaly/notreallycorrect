@@ -1,13 +1,14 @@
 <template>
   <div
     id="scrollContainer"
+    ref="swipeArea"
     class="scroll-container"
     v-dragscroll
     @scroll="onScroll"
     @mousedown="startDrag"
     @mouseup="endDrag"
   >
-    <div class="container">
+    <div :class="[ isPhone() ? 'project-container' : 'container']">
       <template v-if="!isPhone()">
         <ul
           v-for="(group, groupIndex) in projectsLocal"
@@ -35,26 +36,28 @@
         </ul>
       </template>
       <template v-else>
-        <ul ref="container" class="project__list--phone">
-          <li
-            v-for="(project, index) in projectsLocal"
-            :key="`project-${index}`"
-            :ref="`element-${index}`"
-            :id="project.sys.id"
-            class="project"
-          >
-            <Project
-              :project="project"
-              :asset="projects.includes.Asset"
-              @hover-over="
-                (id: string, message: string) => overProject(id, message)
-              "
-              @mouseout="returnVisibility"
-              @image-loaded="addSizeClasses(null)"
-              @switch-img-in-project="(id: string) => onImageChange(id)"
-            />
-          </li>
-        </ul>
+        <ul class="project__list--phone">
+        <li
+          v-for="(project, index) in projectsLocal"
+          :key="`project-${index}`"
+          :ref="`element-${index}`"
+          :id="project.sys.id"
+          :class="index === currentIndex ? 'current' : 'random'"
+          :style="index !== currentIndex ? updatedStyles[index] : {}"
+          class="project"
+        >
+          <Project
+            :project="project"
+            :asset="projects.includes.Asset"
+            @hover-over="
+              (id: string, message: string) => overProject(id, message)
+            "
+            @mouseout="returnVisibility"
+            @image-loaded="addSizeClasses(null)"
+            @switch-img-in-project="(id: string) => onImageChange(id)"
+          />
+        </li>
+      </ul>
       </template>
     </div>
   </div>
@@ -108,7 +111,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
 // @ts-ignore
 import typer from "typer-js";
@@ -116,11 +119,13 @@ import typer from "typer-js";
 import Project from "@/components/Project";
 // @ts-ignore
 import Terminal from "@/components/Terminal";
+import { useSwipe } from "./../composables/swipe";
 
 import _find from "lodash/find";
 import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
 import _orderBy from "lodash/orderBy";
+import _findIndex from "lodash/findIndex";
 
 import {
   randomMarginsLeft,
@@ -148,6 +153,13 @@ const dragging = ref(false);
 const elementsToType = ref();
 const greetingSpeed = { min: 30, max: 50 };
 const terminal = ref<TerminalType | null>(null);
+const swipeArea = ref<HTMLElement | null>(null);
+const isOnSwipeDown = ref<null | boolean>(null);
+const currentIndex = ref(0);
+const previousIndex = ref<null | number>(null);
+const initialPositions = ref<any>({});
+const topPositions = ref<any>({});
+const bottomPositions = ref<any>({});
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -193,7 +205,7 @@ const scrollToProjectById = (id: string) => {
     const imageId = item.querySelector("img")?.id || null;
     addSizeClasses(imageId, true);
     if (isPhone()) {
-      item.scrollIntoView({ behavior: "smooth" });
+      currentIndex.value = _findIndex(projectsLocal.value, (project: any) => project?.sys?.id === id);
     } else {
       scrollElementIntoView(item);
     }
@@ -201,8 +213,12 @@ const scrollToProjectById = (id: string) => {
 };
 
 const scrollTo = (id: string) => {
-  scrollToProjectById(id);
-  setTimeout(() =>  scrollToProjectById(id), 1200);
+  if (isPhone()) {
+    scrollToProjectById(id);
+  } else {
+    scrollToProjectById(id);
+    setTimeout(() =>  scrollToProjectById(id), 1200);
+  }
 }
 
 const returnVisibility = () => {
@@ -287,41 +303,43 @@ const handleHover = async (
 };
 
 const addSizeClasses = (id: string | null, isActive = false) => {
-  if (id) {
-    const image = document.getElementById(id);
-    const parentElement = image?.closest("li");
-    if (image && parentElement) {
-      image?.addEventListener("load", function () {
-        setImageOrientation(image as HTMLImageElement, parentElement, isActive);
-      });
-    }
-    /* @ts-ignore */
-    if (image?.complete && parentElement) {
-      setImageOrientation(image as HTMLImageElement, parentElement, isActive);
-    }
-  } else {
-    const gridItems = document.querySelectorAll(".project");
-    gridItems.forEach((item, index) => {
-      const image = item.querySelector("img");
-
-      image?.addEventListener("load", function () {
-        setImageOrientation(image, item, isActive);
-      });
-
-      if (image?.complete) {
-        setImageOrientation(image, item, isActive);
-      }
-
-      if (index === 0) {
+  if (!isPhone()) {
+    if (id) {
+      const image = document.getElementById(id);
+      const parentElement = image?.closest("li");
+      if (image && parentElement) {
         image?.addEventListener("load", function () {
-          setImageOrientation(image, item, true);
+          setImageOrientation(image as HTMLImageElement, parentElement, isActive);
+        });
+      }
+      /* @ts-ignore */
+      if (image?.complete && parentElement) {
+        setImageOrientation(image as HTMLImageElement, parentElement, isActive);
+      }
+    } else {
+      const gridItems = document.querySelectorAll(".project");
+      gridItems.forEach((item, index) => {
+        const image = item.querySelector("img");
+
+        image?.addEventListener("load", function () {
+          setImageOrientation(image, item, isActive);
         });
 
         if (image?.complete) {
-          setImageOrientation(image, item, true);
+          setImageOrientation(image, item, isActive);
         }
-      }
-    });
+
+        if (index === 0) {
+          image?.addEventListener("load", function () {
+            setImageOrientation(image, item, true);
+          });
+
+          if (image?.complete) {
+            setImageOrientation(image, item, true);
+          }
+        }
+      });
+    }
   }
 };
 
@@ -386,6 +404,7 @@ const fetchProjects = async () => {
     getChunkedProjects();
   } else {
     projectsLocal.value = await projects.value.items;
+    calculateInitialPositions();
   }
 };
 
@@ -393,9 +412,97 @@ const closeIndex = () => {
   indexListOpened.value = false;
 };
 
+const randomizePosition = (isTopHalf: boolean) => {
+  const randomLeft = Math.random() * 90 - 10;
+  const randomTranslateX = Math.random() * 20 - 10;
+  const randomTranslateY = Math.random() * 20 - 10;
+
+  if (isTopHalf) {
+    const randomTop = Math.random() * 30 - 10;
+    return {
+      top: `${randomTop}%`,
+      left: `${randomLeft}%`,
+      transform: `translate(-${randomTranslateX}%, -${randomTranslateY}%)`,
+    };
+  } else {
+    const randomBottom = Math.random() * 30;
+    return {
+      bottom: `${randomBottom}%`,
+      left: `${randomLeft}%`,
+      transform: `translate(-${randomTranslateX}%, -${randomTranslateY}%)`,
+    };
+  }
+};
+
+const calculateInitialPositions = () => {
+  projectsLocal.value.forEach((_: any, index: number) => {
+    initialPositions.value[index] = randomizePosition(false);
+  });
+};
+
+
+const onSwipeUp = () => {
+  if (currentIndex.value < projectsLocal.value.length - 1) {
+    previousIndex.value = currentIndex.value;
+    currentIndex.value++;
+
+    if (!topPositions.value[previousIndex.value]) {
+      topPositions.value[previousIndex.value] = randomizePosition(true);
+    }
+  }
+};
+
+const onSwipeDown = () => {
+  if (currentIndex.value > 0) {
+    previousIndex.value = currentIndex.value;
+    currentIndex.value--;
+
+    if (!bottomPositions.value[previousIndex.value]) {
+      bottomPositions.value[previousIndex.value] = randomizePosition(false);
+    }
+
+    if (topPositions.value[currentIndex.value]) {
+      delete topPositions.value[currentIndex.value];
+    }
+  }
+};
+
+const updatedStyles = computed(() => {
+  const styles: any = {};
+
+  projectsLocal.value.forEach((_: any, index: number) => {
+    if (index === currentIndex.value) {
+      return;
+    } else if (topPositions.value[index]) {
+      styles[index] = topPositions.value[index];
+    } else if (bottomPositions.value[index]) {
+      styles[index] = bottomPositions.value[index];
+    } else {
+      styles[index] = initialPositions.value[index];
+    }
+  });
+
+  return styles;
+});
+
 onMounted(() => {
   fetchProjects();
   typeGreeting();
   window.addEventListener("click", handleClickOutside);
+});
+
+useSwipe(swipeArea, {
+  onSwipeUp: () => {
+    isOnSwipeDown.value = false;
+    onSwipeUp();
+  },
+  onSwipeDown: () => {
+    isOnSwipeDown.value = true;
+    onSwipeDown();
+  },
+});
+
+watch(currentIndex, (newIndex, oldIndex) => {
+  previousIndex.value = oldIndex;
 });
 </script>
