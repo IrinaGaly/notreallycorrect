@@ -4,8 +4,16 @@
   </router-view>
 </template>
 
-<style lang="scss">
+<script>
+import { onUnmounted } from "vue";
 
+onUnmounted(() => {
+  localStorage.removeItem("typeSpeed");
+  localStorage.removeItem("removeSpeed");
+});
+</script>
+
+<style lang="scss">
 #app {
   min-height: 100vh;
   height: 100%;
@@ -19,14 +27,42 @@
 
 .home__background {
   width: 100%;
-  min-height: 100vh;
   height: 100%;
+  min-height: 100vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.projects__background {
+  width: 30vw;
+  height: 30vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  left: 40%;
+  top: 15%;
+}
+
+.about__background {
+  min-width: 30vw;
+  min-height: 50vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 10%;
+}
+
+.about__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .logo {

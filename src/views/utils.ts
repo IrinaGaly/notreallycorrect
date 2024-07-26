@@ -2,9 +2,17 @@ const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_API_KEY;
 const contentTypeId = "projects";
 const mainContentTypeId = "main";
+const aboutTypeId = "aboutPaage";
+const gifyTypeId = "gify";
 
 export const API_PROJECTS = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${contentTypeId}&access_token=${accessToken}`;
 export const API_MAIN = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${mainContentTypeId}&access_token=${accessToken}`;
+export const API_ABOUT = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${aboutTypeId}&access_token=${accessToken}`;
+export const API_PROJECTS_SURPRISE = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${gifyTypeId}&access_token=${accessToken}`;
+
+export const chunkSizes = [
+  2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3,
+];
 
 export const randomMarginsLeft = [
   8, 5, 2, -3, 4, 1, 4, 8, 0, 8, 0, 1, 8, 5, 6, 3, 4, 6, 2, 1, 5, 2, 8, 2, 1, 5,
@@ -70,7 +78,7 @@ export function resolveTypingPromises(
   message: string,
   timeout: number,
   signal = null,
-  isRemoving = false
+  isRemoving = false,
 ) {
   return [...message].map(
     (ch, i) =>
@@ -87,7 +95,7 @@ export function resolveTypingPromises(
             clearTimeout(timeoutId);
             reject(new Error("Aborted"));
           });
-      })
+      }),
   );
 }
 
@@ -95,14 +103,14 @@ export function processMessage(
   message: string,
   timeout: number,
   signal: any,
-  isRemoving = false
+  isRemoving = false,
 ) {
   return new Promise((resolve, reject) => {
     const typePromises = resolveTypingPromises(
       message,
       timeout,
       signal,
-      isRemoving
+      isRemoving,
     );
     typePromises.forEach((promise, i, arr) => {
       promise
@@ -124,40 +132,63 @@ export function processMessage(
 export function setImageOrientation(
   image: HTMLImageElement,
   item: Element,
-  isActive: boolean
+  isActive: boolean,
 ) {
+  let sizeAttr = image.getAttribute("size")?.toLowerCase()
+    ? image.getAttribute("size")?.toLowerCase()
+    : (image.getAttribute("activeSize")?.toLowerCase() ?? "s");
+
   if (image.naturalWidth > image.naturalHeight) {
     /* Image is horizontal */
-    if (isActive) {
-      item.classList.remove("active-project--vertical");
-      item.classList.remove("active-project--square");
-      item.classList.add("active-project--horizontal");
-    } else {
-      item.classList.remove("project--vertical");
-      item.classList.remove("project--square");
-      item.classList.add("project--horizontal");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--horizontal-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--vertical-${sizeAttr}`);
+      item.classList.remove(`project__active--square-${sizeAttr}`);
+      item.classList.add(`project__active--horizontal-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--horizontal-${sizeAttr}`)) {
+      item.classList.remove(`project--vertical-${sizeAttr}`);
+      item.classList.remove(`project--square-${sizeAttr}`);
+      item.classList.add(`project--horizontal-${sizeAttr}`);
     }
   } else if (image.naturalWidth < image.naturalHeight) {
     /* Image is vertical */
-    if (isActive) {
-      item.classList.remove("active-project--horizontal");
-      item.classList.remove("active-project--square");
-      item.classList.add("active-project--vertical");
-    } else {
-      item.classList.remove("project--horizontal");
-      item.classList.remove("project--square");
-      item.classList.add("project--vertical");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--vertical-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--horizontal-${sizeAttr}`);
+      item.classList.remove(`project__active--square-${sizeAttr}`);
+      item.classList.add(`project__active--vertical-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--vertical-${sizeAttr}`)) {
+      item.classList.remove(`project--horizontal-${sizeAttr}`);
+      item.classList.remove(`project--square-${sizeAttr}`);
+      item.classList.add(`project--vertical-${sizeAttr}`);
     }
   } else {
     /* Image is square */
-    if (isActive) {
-      item.classList.remove("active-project--vertical");
-      item.classList.remove("active-project--horizontal");
-      item.classList.add("active-project--square");
-    } else {
-      item.classList.remove("project--vertical");
-      item.classList.remove("project--horizontal");
-      item.classList.add("project--square");
+    if (
+      isActive &&
+      !item.classList.contains(`project__active--square-${sizeAttr}`)
+    ) {
+      item.classList.remove(`project__active--vertical-${sizeAttr}`);
+      item.classList.remove(`project__active--horizontal-${sizeAttr}`);
+      item.classList.add(`project__active--square-${sizeAttr}`);
+    } else if (!item.classList.contains(`project--square-${sizeAttr}`)) {
+      item.classList.remove(`project--vertical-${sizeAttr}`);
+      item.classList.remove(`project--horizontal-${sizeAttr}`);
+      item.classList.add(`project--square-${sizeAttr}`);
     }
   }
+}
+
+export function removeActiveClasses(element: Element) {
+  const classes = Array.from(element.classList);
+
+  classes.forEach((className) => {
+    if (className.startsWith("project__active--")) {
+      element.classList.remove(className);
+    }
+  });
 }

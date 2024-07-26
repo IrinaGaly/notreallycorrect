@@ -3,9 +3,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import "01_settings/settings.colors", "01_settings/settings.responsive",
-  "01_settings/settings.spacings", "01_settings/settings.layout",
-  "01_settings/settings.z-indexes", "01_settings/settings.typography",
-  "01_settings/settings.global";
+@import "01_settings/settings.layout";
 
 @import "02_generic/generic.normalize", "02_generic/generic.box-sizing";
+
+@import "03_components/components.project", "03_components/components.about",
+  "03_components/components.terminal";
+
+@import "04_helpers/helpers";
