@@ -18,7 +18,9 @@
         />
       </Transition>
     </template>
-    <div class="project__title"><span v-if="hovered">{{ mainDescription }}</span></div>
+    <div class="project__title">
+      <span v-if="hovered">{{ mainDescription }}</span>
+    </div>
   </div>
 </template>
 

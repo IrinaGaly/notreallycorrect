@@ -6,7 +6,7 @@ export function useSwipe(
   callbacks: {
     onSwipeUp: () => void;
     onSwipeDown: () => void;
-  }
+  },
 ) {
   onMounted(() => {
     if (elementRef.value) {

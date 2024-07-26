@@ -8,8 +8,12 @@
     @mousedown="startDrag"
     @mouseup="endDrag"
   >
-  <div v-if="shouldShowSurprise" class="projects__background" :style="backgroundImage"></div>
-    <div :class="[ isPhone() ? 'project-container' : 'container']">
+    <div
+      v-if="shouldShowSurprise"
+      class="projects__background"
+      :style="backgroundImage"
+    ></div>
+    <div :class="[isPhone() ? 'project-container' : 'container']">
       <template v-if="!isPhone()">
         <ul
           v-for="(group, groupIndex) in projectsLocal"
@@ -38,27 +42,27 @@
       </template>
       <template v-else>
         <ul class="project__list--phone">
-        <li
-          v-for="(project, index) in projectsLocal"
-          :key="`project-${index}`"
-          :ref="`element-${index}`"
-          :id="project.sys.id"
-          :class="index === currentIndex ? 'current' : 'random'"
-          :style="index !== currentIndex ? updatedStyles[index] : {}"
-          class="project"
-        >
-          <Project
-            :project="project"
-            :asset="projects.includes.Asset"
-            @hover-over="
-              (id: string, message: string) => overProject(id, message)
-            "
-            @mouseout="returnVisibility"
-            @image-loaded="addSizeClasses(null)"
-            @switch-img-in-project="(id: string) => onImageChange(id)"
-          />
-        </li>
-      </ul>
+          <li
+            v-for="(project, index) in projectsLocal"
+            :key="`project-${index}`"
+            :ref="`element-${index}`"
+            :id="project.sys.id"
+            :class="index === currentIndex ? 'current' : 'random'"
+            :style="index !== currentIndex ? updatedStyles[index] : {}"
+            class="project"
+          >
+            <Project
+              :project="project"
+              :asset="projects.includes.Asset"
+              @hover-over="
+                (id: string, message: string) => overProject(id, message)
+              "
+              @mouseout="returnVisibility"
+              @image-loaded="addSizeClasses(null)"
+              @switch-img-in-project="(id: string) => onImageChange(id)"
+            />
+          </li>
+        </ul>
       </template>
     </div>
   </div>
@@ -194,22 +198,39 @@ const imageLoaded = (id: string) => {
 const overProject = (id: string, message: string) => {
   if (!scrolling.value && !isPhone()) {
     addSizeClasses(id, true);
-    introTyped.value && handleHover(message, greetingSpeed.value.max ?? 50, greetingSpeed.value.min ?? 30);
+    introTyped.value &&
+      handleHover(
+        message,
+        greetingSpeed.value.max ?? 50,
+        greetingSpeed.value.min ?? 30,
+      );
   } else if (!scrolling.value && isPhone()) {
-    introTyped.value && handleHover(message, greetingSpeed.value.max ?? 50, greetingSpeed.value.min ?? 30);
+    introTyped.value &&
+      handleHover(
+        message,
+        greetingSpeed.value.max ?? 50,
+        greetingSpeed.value.min ?? 30,
+      );
   }
 };
 
 const gify = () => {
   backgroundImage.value = {
-      backgroundImage: `url(${surprise.value.gifyUrl})`,
-    };
+    backgroundImage: `url(${surprise.value.gifyUrl})`,
+  };
 
-    console.log(surprise.value.appearInSecond)
+  console.log(surprise.value.appearInSecond);
 
-  setTimeout(() => shouldShowSurprise.value = true, surprise.value.appearInSeconds * 1000);
-  setTimeout(() => shouldShowSurprise.value = false, surprise.value.appearInSeconds * 1000 + surprise.value.disappearInSeconds * 1000);
-}
+  setTimeout(
+    () => (shouldShowSurprise.value = true),
+    surprise.value.appearInSeconds * 1000,
+  );
+  setTimeout(
+    () => (shouldShowSurprise.value = false),
+    surprise.value.appearInSeconds * 1000 +
+      surprise.value.disappearInSeconds * 1000,
+  );
+};
 
 const openIndexList = () => {
   indexListOpened.value = true;
@@ -222,7 +243,10 @@ const scrollToProjectById = (id: string) => {
     const imageId = item.querySelector("img")?.id || null;
     addSizeClasses(imageId, true);
     if (isPhone()) {
-      currentIndex.value = _findIndex(projectsLocal.value, (project: any) => project?.sys?.id === id);
+      currentIndex.value = _findIndex(
+        projectsLocal.value,
+        (project: any) => project?.sys?.id === id,
+      );
     } else {
       scrollElementIntoView(item);
     }
@@ -234,9 +258,9 @@ const scrollTo = (id: string) => {
     scrollToProjectById(id);
   } else {
     scrollToProjectById(id);
-    setTimeout(() =>  scrollToProjectById(id), 1200);
+    setTimeout(() => scrollToProjectById(id), 1200);
   }
-}
+};
 
 const returnVisibility = () => {
   if (!scrolling.value && !dragging.value) {
@@ -270,11 +294,11 @@ const getChunkedProjects = async () => {
 
 const startDrag = () => {
   dragging.value = true;
-}
+};
 
-const endDrag= () => {
+const endDrag = () => {
   dragging.value = false;
-}
+};
 
 const onScroll = () => {
   scrolling.value = true;
@@ -335,7 +359,11 @@ const addSizeClasses = (id: string | null, isActive = false) => {
       const parentElement = image?.closest("li");
       if (image && parentElement) {
         image?.addEventListener("load", function () {
-          setImageOrientation(image as HTMLImageElement, parentElement, isActive);
+          setImageOrientation(
+            image as HTMLImageElement,
+            parentElement,
+            isActive,
+          );
         });
       }
       /* @ts-ignore */
@@ -472,7 +500,6 @@ const calculateInitialPositions = () => {
   });
 };
 
-
 const onSwipeUp = () => {
   if (currentIndex.value < projectsLocal.value.length - 1) {
     previousIndex.value = currentIndex.value;
@@ -520,7 +547,7 @@ const updatedStyles = computed(() => {
 const fetchSurprise = async () => {
   surprise.value = await getSurprise();
   gify();
-}
+};
 
 onMounted(() => {
   fetchProjects();
@@ -529,9 +556,17 @@ onMounted(() => {
   window.addEventListener("click", handleClickOutside);
 
   greetingSpeed.value = {
-    min: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ? Number(localStorage.getItem('typeSpeed')) : Number(localStorage.getItem('removeSpeed')),
-    max: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ?  Number(localStorage.getItem('removeSpeed')) + 1 : Number(localStorage.getItem('typeSpeed')),
-  }
+    min:
+      Number(localStorage.getItem("removeSpeed")) >=
+      Number(localStorage.getItem("typeSpeed"))
+        ? Number(localStorage.getItem("typeSpeed"))
+        : Number(localStorage.getItem("removeSpeed")),
+    max:
+      Number(localStorage.getItem("removeSpeed")) >=
+      Number(localStorage.getItem("typeSpeed"))
+        ? Number(localStorage.getItem("removeSpeed")) + 1
+        : Number(localStorage.getItem("typeSpeed")),
+  };
 });
 
 useSwipe(swipeArea, {

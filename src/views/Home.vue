@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <router-link to="/projects" class="home__background" :style="backgroundImage">
+    <router-link
+      to="/projects"
+      class="home__background"
+      :style="backgroundImage"
+    >
       <img class="logo" src="./../assets/notreallycorrect_logo.png" />
     </router-link>
   </div>
@@ -18,8 +22,14 @@ const setBackground = async () => {
     backgroundImage.value = {
       backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
     };
-    localStorage.setItem('removeSpeed', response.data.items[0].fields.removeSpeed ?? 50);
-    localStorage.setItem('typeSpeed', response.data.items[0].fields.typeSpeed ?? 30);
+    localStorage.setItem(
+      "removeSpeed",
+      response.data.items[0].fields.removeSpeed ?? 50,
+    );
+    localStorage.setItem(
+      "typeSpeed",
+      response.data.items[0].fields.typeSpeed ?? 30,
+    );
   });
 };
 

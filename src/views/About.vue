@@ -1,29 +1,32 @@
 <template>
-   <div class="about__container">
-     <div class="about__background" :style="backgroundImage"></div>
-   </div>
-  <Terminal
-    ref="terminal"
-  >
+  <div class="about__container">
+    <div class="about__background" :style="backgroundImage"></div>
+  </div>
+  <Terminal ref="terminal">
     <template #content>
       <div v-if="isIntroTyped" class="terminal__about">
         <div>
-          <router-link to="/" class="cursor-pointer index-toggle">notreallycorrect.</router-link><span>| contact |</span><router-link to="/projects" class="cursor-pointer index-toggle">close X</router-link>
+          <router-link to="/" class="cursor-pointer index-toggle"
+            >notreallycorrect.</router-link
+          ><span>| contact |</span
+          ><router-link to="/projects" class="cursor-pointer index-toggle"
+            >close X</router-link
+          >
         </div>
         <div class="terminal__about-contact">contact us</div>
         <div class="terminal__about-contact">email us</div>
         <div>
-          <a href="tel:+ 420 777 777 777" class="cursor-pointer index-toggle">+ 420 777 777 777</a>&nbsp;
-          <a href="mailto:notreally@email.com" class="cursor-pointer index-toggle"
+          <a href="tel:+ 420 777 777 777" class="cursor-pointer index-toggle"
+            >+ 420 777 777 777</a
+          >&nbsp;
+          <a
+            href="mailto:notreally@email.com"
+            class="cursor-pointer index-toggle"
             >notreally@email.com</a
           >
         </div>
       </div>
-      <nav
-        id="generic-text"
-        class="terminal__content"
-      >
-      </nav>
+      <nav id="generic-text" class="terminal__content"></nav>
     </template>
   </Terminal>
 </template>
@@ -47,11 +50,11 @@ const typeGreetingWithCallback = () => {
     .line("NotReallyCorrect s.r.o.")
     .pause(greetingSpeed.value.max + 100)
     .continue("<br/>Jsme pohádkáři. Ne tak úplně architekti.")
-    .pause(200)
+    .pause(200);
 
-    setTimeout(() => {
-      isIntroTyped.value = true
-    }, 3000);
+  setTimeout(() => {
+    isIntroTyped.value = true;
+  }, 3000);
 };
 
 const typeGreeting = () => {
@@ -69,11 +72,18 @@ const setBackground = async () => {
 
 onMounted(() => {
   greetingSpeed.value = {
-    min: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ? Number(localStorage.getItem('typeSpeed')) : Number(localStorage.getItem('removeSpeed')),
-    max: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ?  Number(localStorage.getItem('removeSpeed')) + 1 : Number(localStorage.getItem('typeSpeed')),
-  }
+    min:
+      Number(localStorage.getItem("removeSpeed")) >=
+      Number(localStorage.getItem("typeSpeed"))
+        ? Number(localStorage.getItem("typeSpeed"))
+        : Number(localStorage.getItem("removeSpeed")),
+    max:
+      Number(localStorage.getItem("removeSpeed")) >=
+      Number(localStorage.getItem("typeSpeed"))
+        ? Number(localStorage.getItem("removeSpeed")) + 1
+        : Number(localStorage.getItem("typeSpeed")),
+  };
   typeGreeting();
   setBackground();
 });
-
 </script>

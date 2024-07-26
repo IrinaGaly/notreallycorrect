@@ -1,11 +1,14 @@
 <template>
-  <div
-    class="terminal"
-  >
+  <div class="terminal">
     <div v-if="introTyped" class="terminal__outdated">
       <div id="name" class="font-bold">notreallycorrect.</div>
       <div data-toBeTyped="  ">&nbsp;</div>
-      <div id="about-link" data-toBeTyped="about" class="cursor-pointer" @click="goToAbout">
+      <div
+        id="about-link"
+        data-toBeTyped="about"
+        class="cursor-pointer"
+        @click="goToAbout"
+      >
         about 
       </div>
       <div data-toBeTyped=" | ">|</div>
@@ -49,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import router from '@/router'; // Adjust the import path if needed
+import router from "@/router"; // Adjust the import path if needed
 
 const props = defineProps<{ introTyped: boolean; projects: any }>();
 const indexListOpened = ref(false);
@@ -73,8 +76,8 @@ const goToProject = (project: any) => {
 };
 
 const goToAbout = () => {
-  router.push('/about');
-}
+  router.push("/about");
+};
 
 defineExpose({
   closeIndexList,
