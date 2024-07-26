@@ -27,7 +27,6 @@ onUnmounted(() => {
 
 .home__background {
   width: 100%;
-  min-height: 100vh;
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -35,6 +34,23 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.about__background {
+  min-width: 30vw;
+  min-height: 50vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 10%;
+}
+
+.about__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 .logo {

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <router-link to="/about" class="home__background" :style="backgroundImage">
+    <router-link to="/projects" class="home__background" :style="backgroundImage">
       <img class="logo" src="./../assets/notreallycorrect_logo.png" />
     </router-link>
   </div>

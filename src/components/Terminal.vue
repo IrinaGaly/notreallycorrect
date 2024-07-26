@@ -5,7 +5,7 @@
     <div v-if="introTyped" class="terminal__outdated">
       <div id="name" class="font-bold">notreallycorrect.</div>
       <div data-toBeTyped="  ">&nbsp;</div>
-      <div id="about-link" data-toBeTyped="about" class="cursor-pointer">
+      <div id="about-link" data-toBeTyped="about" class="cursor-pointer" @click="goToAbout">
         about 
       </div>
       <div data-toBeTyped=" | ">|</div>
@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import router from '@/router'; // Adjust the import path if needed
 
 const props = defineProps<{ introTyped: boolean; projects: any }>();
 const indexListOpened = ref(false);
@@ -70,6 +71,10 @@ const toggleIdexList = () => {
 const goToProject = (project: any) => {
   emit("scroll-to-project", project.sys.id);
 };
+
+const goToAbout = () => {
+  router.push('/about');
+}
 
 defineExpose({
   closeIndexList,

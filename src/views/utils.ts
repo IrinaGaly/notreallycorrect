@@ -2,9 +2,11 @@ const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_API_KEY;
 const contentTypeId = "projects";
 const mainContentTypeId = "main";
+const aboutTypeId = "aboutPaage";
 
 export const API_PROJECTS = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${contentTypeId}&access_token=${accessToken}`;
 export const API_MAIN = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${mainContentTypeId}&access_token=${accessToken}`;
+export const API_ABOUT = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${aboutTypeId}&access_token=${accessToken}`;
 
 export const chunkSizes = [
   2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3,
