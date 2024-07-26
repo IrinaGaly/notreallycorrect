@@ -8,6 +8,7 @@
     @mousedown="startDrag"
     @mouseup="endDrag"
   >
+  <div v-if="shouldShowSurprise" class="projects__background" :style="backgroundImage"></div>
     <div :class="[ isPhone() ? 'project-container' : 'container']">
       <template v-if="!isPhone()">
         <ul
@@ -136,6 +137,7 @@ import {
   processMessage,
   setImageOrientation,
   API_PROJECTS,
+  API_PROJECTS_SURPRISE,
   removeActiveClasses,
   chunkSizes,
 } from "./utils";
@@ -161,6 +163,9 @@ const previousIndex = ref<null | number>(null);
 const initialPositions = ref<any>({});
 const topPositions = ref<any>({});
 const bottomPositions = ref<any>({});
+const backgroundImage = ref<any>({});
+const surprise = ref<any>({});
+const shouldShowSurprise = ref<boolean>(false);
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -194,6 +199,17 @@ const overProject = (id: string, message: string) => {
     introTyped.value && handleHover(message, greetingSpeed.value.max ?? 50, greetingSpeed.value.min ?? 30);
   }
 };
+
+const gify = () => {
+  backgroundImage.value = {
+      backgroundImage: `url(${surprise.value.gifyUrl})`,
+    };
+
+    console.log(surprise.value.appearInSecond)
+
+  setTimeout(() => shouldShowSurprise.value = true, surprise.value.appearInSeconds * 1000);
+  setTimeout(() => shouldShowSurprise.value = false, surprise.value.appearInSeconds * 1000 + surprise.value.disappearInSeconds * 1000);
+}
 
 const openIndexList = () => {
   indexListOpened.value = true;
@@ -274,6 +290,15 @@ const isPhone = () =>
 const getProjects = async () =>
   await axios.get(API_PROJECTS).then((response) => {
     return response.data;
+  });
+
+const getSurprise = async () =>
+  await axios.get(API_PROJECTS_SURPRISE).then((response) => {
+    return {
+      gifyUrl: response.data.includes.Asset[0].fields.file.url,
+      appearInSeconds: response.data.items[0].fields.appearInSeconds,
+      disappearInSeconds: response.data.items[0].fields.disappearInSeconds,
+    };
   });
 
 const handleHover = async (
@@ -492,9 +517,15 @@ const updatedStyles = computed(() => {
   return styles;
 });
 
+const fetchSurprise = async () => {
+  surprise.value = await getSurprise();
+  gify();
+}
+
 onMounted(() => {
   fetchProjects();
   typeGreeting();
+  fetchSurprise();
   window.addEventListener("click", handleClickOutside);
 
   greetingSpeed.value = {

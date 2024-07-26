@@ -28,12 +28,24 @@ onUnmounted(() => {
 .home__background {
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.projects__background {
+  width: 30vw;
+  height: 30vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  left: 40%;
+  top: 15%;
 }
 
 .about__background {

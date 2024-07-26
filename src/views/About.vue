@@ -61,7 +61,6 @@ const typeGreeting = () => {
 
 const setBackground = async () => {
   return await axios.get(API_ABOUT).then((response) => {
-    console.log(response)
     backgroundImage.value = {
       backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
     };

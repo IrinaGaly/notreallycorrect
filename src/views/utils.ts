@@ -3,10 +3,12 @@ const accessToken = import.meta.env.VITE_API_KEY;
 const contentTypeId = "projects";
 const mainContentTypeId = "main";
 const aboutTypeId = "aboutPaage";
+const gifyTypeId = "gify";
 
 export const API_PROJECTS = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${contentTypeId}&access_token=${accessToken}`;
 export const API_MAIN = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${mainContentTypeId}&access_token=${accessToken}`;
 export const API_ABOUT = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${aboutTypeId}&access_token=${accessToken}`;
+export const API_PROJECTS_SURPRISE = `https://cdn.contentful.com/spaces/${spaceId}/entries?content_type=${gifyTypeId}&access_token=${accessToken}`;
 
 export const chunkSizes = [
   2, 4, 3, 5, 3, 2, 5, 4, 3, 2, 5, 3, 2, 5, 3, 4, 5, 2, 4, 5, 3,
@@ -20,14 +22,11 @@ export const randomMarginsLeft = [
 ];
 
 export const randomMarginsTop = [
-  // 2, 8, 0, 3, 8, -2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6,
-
-  2,
-  0, 0, 3, 8, 2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6, -5,
-  3, 0, -3, 7, 1, 5, -4, 2, -1, 6, -2, 8, -3, 7, 5, -1, 6, 0, -4, 3, -2, 1, 4,
-  -5, 7, -1, 3, 2, -4, 5, -3, 1, -2, 4, 8, -5, 6, -1, 2, -3, 5, 0, 3, -4, 7, 1,
-  -2, 6, -5, 3, 2, -1, 4, 8, -4, 5, -2, 1, 7, 0, 6, -3, 8, 2, -1, 4, -5, 3, 6,
-  0, -4, 7,
+  2, 0, 0, 3, 8, 2, 0, 4, -1, 5, -2, 1, 6, 2, -4, 3, -5, 1, -2, 5, 2, -1, 4, 6,
+  -5, 3, 0, -3, 7, 1, 5, -4, 2, -1, 6, -2, 8, -3, 7, 5, -1, 6, 0, -4, 3, -2, 1,
+  4, -5, 7, -1, 3, 2, -4, 5, -3, 1, -2, 4, 8, -5, 6, -1, 2, -3, 5, 0, 3, -4, 7,
+  1, -2, 6, -5, 3, 2, -1, 4, 8, -4, 5, -2, 1, 7, 0, 6, -3, 8, 2, -1, 4, -5, 3,
+  6, 0, -4, 7,
 ];
 
 export function scrollElementIntoView(element: HTMLElement) {
