@@ -102,6 +102,13 @@
   animation: blink 1s linear infinite;
 }
 
+.index-toggle {
+  &:hover {
+    font-weight: bold;
+    color: white;
+  }
+}
+
 @keyframes blink {
   0% {
     opacity: 0;

@@ -133,7 +133,7 @@ export function setImageOrientation(
   item: Element,
   isActive: boolean
 ) {
-  let sizeAttr = image.getAttribute("size")?.toLowerCase() ?? "s";
+  let sizeAttr = image.getAttribute("size")?.toLowerCase() ?? "m";
 
   if (image.naturalWidth > image.naturalHeight) {
     /* Image is horizontal */

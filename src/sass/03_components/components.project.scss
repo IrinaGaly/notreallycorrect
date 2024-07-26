@@ -18,33 +18,33 @@
 }
 
 .project--horizontal-s {
-  max-width: 20vw;
-  min-width: 20vw;
+  max-width: 25vw;
+  min-width: 25vw;
 }
 
 .project--horizontal-m {
-  max-width: 25vw;
-  min-width: 25vw;
+  max-width: 35vw;
+  min-width: 35vw;
 }
 
 .project--horizontal-l {
-  max-width: 30vw;
-  min-width: 30vw;
+  max-width: 45vw;
+  min-width: 45vw;
 }
 
 .project--vertical-s {
-  min-width: 15vw;
-  max-width: 15vw;
-}
-
-.project--vertical-m {
   min-width: 20vw;
   max-width: 20vw;
 }
 
+.project--vertical-m {
+  min-width: 23vw;
+  max-width: 23vw;
+}
+
 .project--vertical-l {
-  min-width: 25vw;
-  max-width: 25vw;
+  min-width: 30vw;
+  max-width: 30vw;
 }
 
 .project--square-s {
@@ -58,8 +58,8 @@
 }
 
 .project--square-l {
-  max-width: 25vw;
-  min-width: 25vw;
+  max-width: 30vw;
+  min-width: 30vw;
 }
 
 .project {
@@ -96,7 +96,7 @@
 }
 
 .project__active--square-s {
-  min-width: 40vw;
+  min-width: 35vw;
 }
 
 .project__active--vertical-m {
@@ -104,23 +104,25 @@
 }
 
 .project__active--horizontal-m {
-  min-width: 45vw;
+  min-width: 50vw;
 }
 
 .project__active--square-m {
-  min-width: 45vw;
+  min-width: 42vw;
 }
 
 .project__active--vertical-l {
-  min-width: 40vw;
+  min-width: 35vw;
+  max-width: 35vw;
 }
 
 .project__active--horizontal-l {
-  min-width: 50vw;
+  min-width: 60vw;
+  max-width: 60vw;
 }
 
 .project__active--square-l {
-  min-width: 50vw;
+  min-width: 47vw;
 }
 
 @keyframes showup {
