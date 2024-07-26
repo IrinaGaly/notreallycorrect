@@ -18,6 +18,8 @@ const setBackground = async () => {
     backgroundImage.value = {
       backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
     };
+    localStorage.setItem('removeSpeed', response.data.items[0].fields.removeSpeed ?? 50);
+    localStorage.setItem('typeSpeed', response.data.items[0].fields.typeSpeed ?? 30);
   });
 };
 

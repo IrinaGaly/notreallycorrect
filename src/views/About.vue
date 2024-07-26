@@ -126,6 +126,7 @@ import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
 import _orderBy from "lodash/orderBy";
 import _findIndex from "lodash/findIndex";
+import _shuffle from "lodash/shuffle";
 
 import {
   randomMarginsLeft,
@@ -151,7 +152,7 @@ const projectsLocal = ref();
 const scrolling = ref(false);
 const dragging = ref(false);
 const elementsToType = ref();
-const greetingSpeed = { min: 30, max: 50 };
+const greetingSpeed = ref({ min: 30, max: 50 });
 const terminal = ref<TerminalType | null>(null);
 const swipeArea = ref<HTMLElement | null>(null);
 const isOnSwipeDown = ref<null | boolean>(null);
@@ -188,9 +189,9 @@ const imageLoaded = (id: string) => {
 const overProject = (id: string, message: string) => {
   if (!scrolling.value && !isPhone()) {
     addSizeClasses(id, true);
-    introTyped.value && handleHover(message, 50, 30);
+    introTyped.value && handleHover(message, greetingSpeed.value.max ?? 50, greetingSpeed.value.min ?? 30);
   } else if (!scrolling.value && isPhone()) {
-    introTyped.value && handleHover(message, 50, 30);
+    introTyped.value && handleHover(message, greetingSpeed.value.max ?? 50, greetingSpeed.value.min ?? 30);
   }
 };
 
@@ -356,9 +357,9 @@ const setMarginsRandomly = () => {
 };
 
 const typeGreetingWithCallback = (cb: () => void) => {
-  typer("#generic-text", greetingSpeed)
+  typer("#generic-text", greetingSpeed.value)
     .line("Hey there!")
-    .pause(400)
+    .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
     .line("Exploring the beauty that others have condemned.")
     .pause(200)
@@ -374,7 +375,7 @@ const typeRecursive = (i = 0) => {
     return;
   }
 
-  const typerino = typer(elementsToType.value[i], greetingSpeed);
+  const typerino = typer(elementsToType.value[i], greetingSpeed.value);
   const toBeTyped = elementsToType.value[i].getAttribute("data-toBeTyped");
 
   typerino.line(toBeTyped);
@@ -394,11 +395,17 @@ const typeGreeting = () => {
 const fetchProjects = async () => {
   projects.value = await getProjects();
 
-  projects.value.items = _orderBy(
+  const orderedItems = _orderBy(
     projects.value.items,
     (item) => item.sys.createdAt,
     "desc",
   );
+
+  const latestItem = orderedItems[0];
+  const remainingItems = orderedItems.slice(1);
+  const shuffledItems = _shuffle(remainingItems);
+
+  projects.value.items = [latestItem, ...shuffledItems];
 
   if (!isPhone()) {
     getChunkedProjects();
@@ -489,6 +496,11 @@ onMounted(() => {
   fetchProjects();
   typeGreeting();
   window.addEventListener("click", handleClickOutside);
+
+  greetingSpeed.value = {
+    min: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ? Number(localStorage.getItem('typeSpeed')) : Number(localStorage.getItem('removeSpeed')),
+    max: Number(localStorage.getItem('removeSpeed')) >= Number(localStorage.getItem('typeSpeed')) ?  Number(localStorage.getItem('removeSpeed')) + 1 : Number(localStorage.getItem('typeSpeed')),
+  }
 });
 
 useSwipe(swipeArea, {

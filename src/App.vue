@@ -4,6 +4,15 @@
   </router-view>
 </template>
 
+<script>
+import { onUnmounted } from 'vue';
+
+onUnmounted(() => {
+  localStorage.removeItem('typeSpeed');
+  localStorage.removeItem('removeSpeed')
+})
+</script>
+
 <style lang="scss">
 #app {
   min-height: 100vh;

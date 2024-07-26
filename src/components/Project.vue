@@ -49,10 +49,12 @@ const emit = defineEmits([
 const currentIndex = ref<number>(0);
 
 const hoverOver = (image: Image) => {
-  hovered.value = true;
-  const description = getImageDescription(image);
-  mainDescription.value = description;
-  emit("hover-over", image?.sys?.id, getImageDescription(image));
+  if (!props.project.fields.isDead) {
+    hovered.value = true;
+    const description = getImageDescription(image);
+    mainDescription.value = description;
+    emit("hover-over", image?.sys?.id, getImageDescription(image));
+  }
 };
 
 const onMouseleave = () => {
