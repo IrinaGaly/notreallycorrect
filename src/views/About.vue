@@ -206,7 +206,7 @@ const scrollTo = (id: string) => {
 }
 
 const returnVisibility = () => {
-  if (!scrolling.value) {
+  if (!scrolling.value && !dragging.value) {
     const gridItems = document.querySelectorAll(".project");
 
     gridItems.forEach((item) => {
