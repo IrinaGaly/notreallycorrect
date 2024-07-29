@@ -54,6 +54,8 @@
             <Project
               :project="project"
               :asset="projects.includes.Asset"
+              :is-phone="true"
+              :is-current="index === currentIndex"
               @hover-over="
                 (id: string, message: string) => overProject(id, message)
               "
@@ -545,7 +547,10 @@ const updatedStyles = computed(() => {
 
 const fetchSurprise = async () => {
   surprise.value = await getSurprise();
-  intervalId.value = setInterval(gify, surprise.value.disappearInSeconds * 1000);
+  intervalId.value = setInterval(
+    gify,
+    surprise.value.disappearInSeconds * 1000,
+  );
 };
 
 onMounted(() => {
@@ -571,10 +576,12 @@ onMounted(() => {
 useSwipe(swipeArea, {
   onSwipeUp: () => {
     isOnSwipeDown.value = false;
+    returnVisibility();
     onSwipeUp();
   },
   onSwipeDown: () => {
     isOnSwipeDown.value = true;
+    returnVisibility();
     onSwipeDown();
   },
 });

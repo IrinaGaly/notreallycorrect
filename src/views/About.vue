@@ -1,8 +1,8 @@
 <template>
   <div class="about__container">
-    <img :src="imageUrl" class="about__background"/>
-  
-  <div v-if="isIntroTyped" class="terminal__about">
+    <img :src="imageUrl" class="about__background" />
+
+    <div v-if="isIntroTyped" class="terminal__about">
       <div>
         <router-link to="/" class="cursor-pointer index-toggle inline"
           >notreallycorrect.</router-link
@@ -13,10 +13,20 @@
       </div>
 
       <template v-if="isContactShown">
-        <div class="terminal__about-contact terminal__about-contact--phone">contact us</div>
-        <div class="terminal__about-contact terminal__about-contact--email">email us</div>
+        <a
+          href="tel:+ 420 777 777 777"
+          class="terminal__about-contact terminal__about-contact--phone index-toggle"
+          >contact us</a
+        >
+        <a
+          href="mailto:notreally@email.com"
+          class="terminal__about-contact terminal__about-contact--email index-toggle"
+          >email us</a
+        >
         <div>
-          <a href="tel:+ 420 777 777 777" class="cursor-pointer index-toggle phone"
+          <a
+            href="tel:+ 420 777 777 777"
+            class="cursor-pointer index-toggle phone"
             >+ 420 777 777 777</a
           >&nbsp;
           <a
@@ -24,18 +34,15 @@
             class="cursor-pointer index-toggle email"
             >notreally@email.com</a
           >
-      </div>
-    </template>
+        </div>
+      </template>
+    </div>
   </div>
-</div>
   <Terminal ref="terminal" class="terminal--about">
     <template #content>
       <nav id="generic-text" class="terminal__content"></nav>
       <div v-if="!isIntroTyped">
-        <nav
-          id="generic-text"
-          class="terminal__content"
-        >
+        <nav id="generic-text" class="terminal__content">
           <span
             id="name"
             data-toBeTyped="notreallycorrect."
@@ -70,7 +77,7 @@ const greetingSpeed = ref({ min: 30, max: 50 });
 const elementsToType = ref();
 const isIntroTyped = ref(false);
 const isContactShown = ref(false);
-const imageUrl = ref('');
+const imageUrl = ref("");
 
 const typeGreetingWithCallback = () => {
   elementsToType.value = document.querySelectorAll("nav > *");
@@ -116,13 +123,12 @@ const typeGreetingWithCallback = () => {
 
 const typeGreeting = () => {
   elementsToType.value = document.querySelectorAll("nav > span");
-  typeRecursive()
+  typeRecursive();
 };
 
 const setBackground = () => {
-    imageUrl.value = localStorage.getItem('aboutBackground') ?? '';
+  imageUrl.value = localStorage.getItem("aboutBackground") ?? "";
 };
-
 
 const typeRecursive = (i = 0) => {
   if (i === elementsToType.value.length) {

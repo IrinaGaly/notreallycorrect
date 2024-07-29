@@ -6,7 +6,7 @@
       <div
         id="about-link"
         data-toBeTyped="about"
-        class="cursor-pointer"
+        class="cursor-pointer index-toggle"
         @click="goToAbout"
       >
         about 
@@ -20,11 +20,19 @@
         > index </a
       >
       <div data-toBeTyped=" | ">|</div>
-      <a href="mailto:adam.zajacek@gmail.com" data-toBeTyped="email "
+      <a
+        href="mailto:adam.zajacek@gmail.com"
+        data-toBeTyped="email "
+        class="cursor-pointer index-toggle"
         > email </a
       >
       <div data-toBeTyped=" | ">|</div>
-      <a href="https://instagram.com" data-toBeTyped="ig"> ig</a>
+      <a
+        href="https://instagram.com"
+        data-toBeTyped="ig"
+        class="cursor-pointer index-toggle"
+        > ig</a
+      >
     </div>
     <div class="terminal__container">
       <template v-if="indexListOpened">
@@ -52,9 +60,18 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import router from "@/router"; // Adjust the import path if needed
+import router from "@/router";
 
-const props = defineProps<{ introTyped: boolean; projects: any }>();
+interface Props {
+  projects?: any[];
+  introTyped?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  projects: () => [],
+  introTyped: false,
+});
+
 const indexListOpened = ref(false);
 const emit = defineEmits(["open-index", "scroll-to-project"]);
 

@@ -11,7 +11,10 @@
           :id="image.sys.id"
           :size="project.fields.size ?? 's'"
           :class="{ cursorPointer: project.fields.images?.length > 1 }"
-          v-lazy="`${getImageUrl(project.fields.images[currentIndex])}`"
+          v-lazy="{
+            src: `${getImageUrl(project.fields.images[currentIndex])}`,
+            loaded: imageLoaded(image),
+          }"
           @mouseover="hoverOver(image)"
           @mouseleave="onMouseleave"
           @click="clickImage(image)"
@@ -36,7 +39,20 @@ interface Image {
   };
 }
 
-const props = defineProps<{ project: any; asset: any }>();
+interface Props {
+  project: any;
+  asset: any;
+  isPhone?: boolean;
+  isCurrent?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  project: () => {},
+  asset: () => {},
+  isPhone: false,
+  isCurrent: false,
+});
+
 const hovered = ref(false);
 const mainDescription = ref<string>("");
 const emit = defineEmits([
@@ -50,6 +66,11 @@ const emit = defineEmits([
 ]);
 const currentIndex = ref<number>(0);
 
+const imageLoaded = (image: Image) => {
+  if (props.isCurrent && props.isPhone) {
+    hoverOver(image);
+  }
+};
 const hoverOver = (image: Image) => {
   if (!props.project.fields.isDead) {
     hovered.value = true;
@@ -65,9 +86,11 @@ const onMouseleave = () => {
 };
 
 const clickImage = (image: Image) => {
-  currentIndex.value =
-    (currentIndex.value + 1) % props.project.fields.images.length;
-  emit("switch-img-in-project", image?.sys?.id || "");
+  if ((props.isCurrent && props.isPhone) || !props.isPhone) {
+    currentIndex.value =
+      (currentIndex.value + 1) % props.project.fields.images.length;
+    emit("switch-img-in-project", image?.sys?.id || "");
+  }
 };
 
 const getImageUrl = (image: Image) =>
