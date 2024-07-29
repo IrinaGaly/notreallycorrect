@@ -105,8 +105,8 @@
 
 .terminal__about {
   position: absolute;
-  bottom: 5rem;
-  left: 0;
+  bottom: 12%;
+  left: 2rem;
   color: white;
   background-color: transparent;
   display: flex;
@@ -115,11 +115,18 @@
   flex-direction: column;
 }
 
+.terminal__container {
+  display: flex;
+}
+
 .terminal__about-contact {
   font-size: 2rem;
+  white-space: nowrap;
 }
 
 .index-toggle {
+  white-space: nowrap;
+
   &:hover {
     font-weight: bold;
     color: white;
@@ -147,6 +154,14 @@
     top: 7%;
     max-width: 100%;
     max-height: 18vh;
+  }
+
+  .terminal--about {
+    top: 17%;
+  }
+
+  .terminal__about {
+    bottom: 80%;
   }
 
   .terminal__outdated {

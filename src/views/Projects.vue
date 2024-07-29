@@ -170,6 +170,7 @@ const bottomPositions = ref<any>({});
 const backgroundImage = ref<any>({});
 const surprise = ref<any>({});
 const shouldShowSurprise = ref<boolean>(false);
+const intervalId = ref<any>(null);
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -218,8 +219,6 @@ const gify = () => {
   backgroundImage.value = {
     backgroundImage: `url(${surprise.value.gifyUrl})`,
   };
-
-  console.log(surprise.value.appearInSecond);
 
   setTimeout(
     () => (shouldShowSurprise.value = true),
@@ -546,7 +545,7 @@ const updatedStyles = computed(() => {
 
 const fetchSurprise = async () => {
   surprise.value = await getSurprise();
-  gify();
+  intervalId.value = setInterval(gify, surprise.value.disappearInSeconds * 1000);
 };
 
 onMounted(() => {

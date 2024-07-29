@@ -3,6 +3,7 @@ import { createApp } from "vue";
 
 import "./style.css";
 import "@/sass/main.scss";
+// @ts-ignore
 import App from "./App.vue";
 // @ts-ignore
 import VueLazyload from "vue-lazyload";

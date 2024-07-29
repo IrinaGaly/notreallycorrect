@@ -44,3 +44,21 @@
 .cursor {
   cursor: pointer;
 }
+
+.block {
+  display: block;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.inline {
+  display: inline;
+}
+
+.terminal__about-contact--phone:hover~div .phone,
+.terminal__about-contact--email:hover~div .email {
+  transition: all 800ms ease-in-out 0s;
+  letter-spacing: 2px;
+}

@@ -49,15 +49,13 @@ onUnmounted(() => {
 }
 
 .about__background {
-  min-width: 30vw;
-  min-height: 50vh;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  width: 70%;
+  height: 100%;
   margin-bottom: 10%;
 }
 
 .about__container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,5 +66,11 @@ onUnmounted(() => {
 .logo {
   width: 90px;
   height: 90px;
+}
+
+@media only screen and (max-width: 768px) {
+  .about__background {
+    margin-top: 25%;
+  }
 }
 </style>
