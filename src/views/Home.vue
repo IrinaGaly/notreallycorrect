@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import _find from "lodash/find";
 import { API_MAIN } from "./utils";
 
 const backgroundImage = ref({});
@@ -20,7 +21,7 @@ const backgroundImage = ref({});
 const setBackground = async () => {
   return await axios.get(API_MAIN).then((response) => {
     backgroundImage.value = {
-      backgroundImage: `url(${response.data.includes.Asset[0].fields.file.url})`,
+      backgroundImage: `url(${_find(response.data.includes.Asset, (item) => item.sys.id === response.data.items[0].fields.background.sys.id)?.fields.file.url ?? ""})`,
     };
     localStorage.setItem(
       "removeSpeed",
@@ -29,6 +30,14 @@ const setBackground = async () => {
     localStorage.setItem(
       "typeSpeed",
       response.data.items[0].fields.typeSpeed ?? 30,
+    );
+    localStorage.setItem(
+      "aboutBackground",
+      _find(
+        response.data.includes.Asset,
+        (item) =>
+          item.sys.id === response.data.items[0].fields.aboutBackground.sys.id,
+      )?.fields.file.url,
     );
   });
 };
