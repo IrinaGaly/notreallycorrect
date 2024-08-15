@@ -33,9 +33,9 @@
       <template v-if="indexListOpened">
         <ul class="terminal__list">
           <li
-            v-for="project, index in projects"
+            v-for="(project, index) in projects"
             class="terminal__item"
-            :class="{'bold' : selectedIndex === index }"
+            :class="{ bold: selectedIndex === index }"
             @click="goToProject(project, index)"
           >
             <span class="terminal__item--title">
@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import router from "@/router";
-import _findIndex from 'lodash/findIndex';
+import _findIndex from "lodash/findIndex";
 
 interface Props {
   projects?: any[];
@@ -98,7 +98,10 @@ const goToAbout = () => {
 };
 
 const setIndex = (projectId: string) => {
-  selectedIndex.value = _findIndex(props.projects, (project) => project.sys.id === projectId);
+  selectedIndex.value = _findIndex(
+    props.projects,
+    (project) => project.sys.id === projectId,
+  );
 };
 
 defineExpose({
