@@ -31,7 +31,8 @@
               :project="project"
               :asset="projects.includes.Asset"
               @hover-over="
-                (id: string, message: string) => overProject(project.sys.id, id, message)
+                (id: string, message: string) =>
+                  overProject(project.sys.id, id, message)
               "
               @mouseout="returnVisibility"
               @image-loaded="(id: string) => imageLoaded(id)"
@@ -57,7 +58,8 @@
               :is-phone="true"
               :is-current="index === currentIndex"
               @hover-over="
-                (id: string, message: string) => overProject(project.sys.id, id, message)
+                (id: string, message: string) =>
+                  overProject(project.sys.id, id, message)
               "
               @mouseout="returnVisibility"
               @image-loaded="addSizeClasses(null)"

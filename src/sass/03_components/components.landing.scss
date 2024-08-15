@@ -45,6 +45,7 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .logo {
@@ -53,7 +54,7 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .about__background {
+  .about__background--margin {
     margin-top: 87%;
   }
 }
