@@ -104,7 +104,7 @@
         <div data-toBeTyped=" | "></div>
         <a
           href="mailto:adam.zajacek@gmail.com"
-          data-toBeTyped="email "
+          data-toBeTyped="email"
           class="terminal__link"
         ></a>
       </nav>
