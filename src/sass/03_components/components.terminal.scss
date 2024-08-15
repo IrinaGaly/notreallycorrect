@@ -170,6 +170,11 @@
     max-width: 85%;
     max-height: 18vh;
     height: fit-content;
+    font-size: 12px;
+  }
+
+  .terminal__cursor {
+    margin-bottom: 3px;
   }
 
   .terminal--about {
