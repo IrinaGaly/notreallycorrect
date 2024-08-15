@@ -170,6 +170,7 @@
   justify-content: center;
   align-items: center;
   z-index: 100;
+  margin: 0;
 }
 
 .random.project {
@@ -214,12 +215,10 @@
     margin-bottom: 10%;
   }
 
-  .project:last-of-type {
-    margin-bottom: 30%;
-  }
-
-  .project__container {
-    padding: 10%;
+  .current {
+    .project__container {
+      padding: 10%;
+    }
   }
 
   .project__title {
