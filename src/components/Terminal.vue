@@ -38,7 +38,6 @@
             :class="{'bold' : selectedIndex === index }"
             @click="goToProject(project, index)"
           >
-          {{ index }}
             <span class="terminal__item--title">
               {{ project.fields.title }}
             </span>

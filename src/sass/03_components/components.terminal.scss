@@ -170,14 +170,47 @@
     max-width: 85%;
     max-height: 18vh;
     height: fit-content;
+    font-size: 12px;
+  }
+
+  .terminal__cursor {
+    margin-bottom: 3px;
   }
 
   .terminal--about {
-    top: 22%;
+    top: 10%;
+    margin: 3.5rem;
   }
 
   .terminal__about {
-    bottom: 77%;
+    bottom: unset;
+    height: 100%;
+    width: 100%;
+  }
+
+  .terminal__about-phone {
+    position: absolute;
+    left: 1.5rem;
+    color: white;
+    background-color: transparent;
+    display: flex;
+    transition: all 1s ease-out 0s;
+    display: flex;
+    font-size: 14px;
+  }
+
+  .terminal__about-contact {
+    font-size: 1.3rem !important;
+  }
+
+  .terminal__about-contacts {
+    bottom: 40%;
+    flex-direction: column;
+  }
+
+  .terminal__about-panel {
+    bottom: 85%;
+    width: 100%;
   }
 
   .terminal__outdated {

@@ -5,7 +5,7 @@
 
     <div v-if="isIntroTyped" class="terminal__about">
       <transition name="fade">
-        <div v-if="isContactShown">
+        <div v-if="isContactShown" class="terminal__about-phone terminal__about-contacts">
           <div class="terminal__about-contact">CONTACT</div>
           <div class="bold">e-mail</div>
           <a
@@ -36,14 +36,14 @@
         </div>
       </transition>
 
-        <div>
+        <div class="terminal__about-phone terminal__about-panel">
           <router-link
             to="/projects"
             class="cursor-pointer index-toggle inline bold"
             >notreallycorrect.</router-link
           ><span class="no-wrap index-toggle inline contact bold">| contact |</span
           ><router-link to="/projects" class="cursor-pointer index-toggle inline"
-            >close X</router-link
+            >&nbsp;close &#10005;</router-link
           >
         </div>
  
@@ -61,7 +61,7 @@
             data-toBeTyped="notreallycorrect."
             class="font-bold"
           ></span>
-          <span data-toBeTyped="  "></span>
+          <span data-toBeTyped=" "></span>
           <span
             id="about-link"
             data-toBeTyped="contact"
@@ -70,7 +70,7 @@
           <span data-toBeTyped=" | "></span>
           <span
             id="index-toggle"
-            data-toBeTyped="close X"
+            data-toBeTyped="close &#10005;"
             class="cursor-pointer"
           ></span>
         </nav>
