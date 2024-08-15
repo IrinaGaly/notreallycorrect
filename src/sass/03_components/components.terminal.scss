@@ -178,19 +178,24 @@
   }
 
   .terminal--about {
-    top: 10%;
-    margin: 3.5rem;
+    top: 60px;
+    margin: 2rem;
+
+    .terminal__cursor {
+      margin-left: 3px;
+    }
   }
 
   .terminal__about {
     bottom: unset;
+    left: unset;
     height: 100%;
     width: 100%;
   }
 
   .terminal__about-phone {
     position: absolute;
-    left: 1.5rem;
+    left: 2rem;
     color: white;
     background-color: transparent;
     display: flex;
@@ -204,12 +209,12 @@
   }
 
   .terminal__about-contacts {
-    bottom: 40%;
+    top: 145px;
     flex-direction: column;
   }
 
   .terminal__about-panel {
-    bottom: 85%;
+    top: 60px;
     width: 100%;
   }
 

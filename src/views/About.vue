@@ -1,6 +1,6 @@
 <template>
   <div class="about__container">
-    <img :src="imageUrl" class="about__background" />
+    <img :src="imageUrl" class="about__background" :class="{'about__background--margin' : isContactShown }" />
     <transition name="fade">
 
     <div v-if="isIntroTyped" class="terminal__about">
