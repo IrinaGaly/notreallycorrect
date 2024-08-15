@@ -31,7 +31,7 @@
               :project="project"
               :asset="projects.includes.Asset"
               @hover-over="
-                (id: string, message: string) => overProject(id, message)
+                (id: string, message: string) => overProject(project.sys.id, id, message)
               "
               @mouseout="returnVisibility"
               @image-loaded="(id: string) => imageLoaded(id)"
@@ -57,7 +57,7 @@
               :is-phone="true"
               :is-current="index === currentIndex"
               @hover-over="
-                (id: string, message: string) => overProject(id, message)
+                (id: string, message: string) => overProject(project.sys.id, id, message)
               "
               @mouseout="returnVisibility"
               @image-loaded="addSizeClasses(null)"
@@ -105,12 +105,6 @@
           data-toBeTyped="email "
           class="terminal__link"
         ></a>
-        <div data-toBeTyped=" | "></div>
-        <a
-          href="https://instagram.com"
-          data-toBeTyped="ig"
-          class="terminal__link"
-        ></a>
       </nav>
       <div v-else-if="!indexListOpened" id="terminal"></div>
     </template>
@@ -150,6 +144,7 @@ import {
 
 export interface TerminalType {
   closeIndexList: () => void;
+  setIndex: (projectId: string) => void;
 }
 
 const introTyped = ref(false);
@@ -160,7 +155,7 @@ const projectsLocal = ref();
 const scrolling = ref(false);
 const dragging = ref(false);
 const elementsToType = ref();
-const greetingSpeed = ref({ min: 30, max: 50 });
+const greetingSpeed = ref({ min: 10, max: 11 });
 const terminal = ref<TerminalType | null>(null);
 const swipeArea = ref<HTMLElement | null>(null);
 const isOnSwipeDown = ref<null | boolean>(null);
@@ -173,6 +168,8 @@ const backgroundImage = ref<any>({});
 const surprise = ref<any>({});
 const shouldShowSurprise = ref<boolean>(false);
 const intervalId = ref<any>(null);
+const welcomeText = ref<string[]>([]);
+const isProgrammaticScroll = ref<boolean>(false);
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -198,21 +195,23 @@ const imageLoaded = (id: string) => {
   setMarginsRandomly();
 };
 
-const overProject = (id: string, message: string) => {
+const overProject = (projectId: string, id: string, message: string) => {
+  terminal?.value?.setIndex(projectId);
+
   if (!scrolling.value && !isPhone()) {
     addSizeClasses(id, true);
     introTyped.value &&
       handleHover(
         message,
-        greetingSpeed.value.max ?? 50,
-        greetingSpeed.value.min ?? 30,
+        greetingSpeed.value.max ?? 10,
+        greetingSpeed.value.min ?? 11,
       );
   } else if (!scrolling.value && isPhone()) {
     introTyped.value &&
       handleHover(
         message,
-        greetingSpeed.value.max ?? 50,
-        greetingSpeed.value.min ?? 30,
+        greetingSpeed.value.max ?? 10,
+        greetingSpeed.value.min ?? 11,
       );
   }
 };
@@ -250,6 +249,7 @@ const scrollToProjectById = (id: string) => {
       );
     } else {
       scrollElementIntoView(item);
+      isProgrammaticScroll.value = true;
     }
   }
 };
@@ -383,16 +383,6 @@ const addSizeClasses = (id: string | null, isActive = false) => {
         if (image?.complete) {
           setImageOrientation(image, item, isActive);
         }
-
-        if (index === 0) {
-          image?.addEventListener("load", function () {
-            setImageOrientation(image, item, true);
-          });
-
-          if (image?.complete) {
-            setImageOrientation(image, item, true);
-          }
-        }
       });
     }
   }
@@ -411,14 +401,14 @@ const setMarginsRandomly = () => {
 };
 
 const typeGreetingWithCallback = (cb: () => void) => {
-  typer("#generic-text", greetingSpeed.value)
-    .line("Hey there!")
-    .pause(greetingSpeed.value.max + 100)
-    .back("all", 40)
-    .line("Exploring the beauty that others have condemned.")
-    .pause(200)
-    .back("all", 40)
-    .run(cb);
+  const typerInstance = typer("#generic-text", greetingSpeed.value);
+  welcomeText.value.forEach((text) =>
+    typerInstance
+      .line(text)
+      .pause(greetingSpeed.value.max + 300)
+      .back("all", greetingSpeed.value.max),
+  );
+  typerInstance.run(cb);
 };
 
 const typeRecursive = (i = 0) => {
@@ -434,9 +424,12 @@ const typeRecursive = (i = 0) => {
 
   typerino.line(toBeTyped);
 
-  setTimeout(() => {
-    typeRecursive(i + 1);
-  }, 75 * toBeTyped.length);
+  setTimeout(
+    () => {
+      typeRecursive(i + 1);
+    },
+    greetingSpeed.value.max + 20 * toBeTyped.length,
+  );
 };
 
 const typeGreeting = () => {
@@ -554,6 +547,7 @@ const fetchSurprise = async () => {
 };
 
 onMounted(() => {
+  welcomeText.value = localStorage.getItem("welcomeText")?.split("\n") ?? [""];
   fetchProjects();
   typeGreeting();
   fetchSurprise();

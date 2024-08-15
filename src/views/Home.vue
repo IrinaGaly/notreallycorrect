@@ -39,6 +39,14 @@ const setBackground = async () => {
           item.sys.id === response.data.items[0].fields.aboutBackground.sys.id,
       )?.fields.file.url,
     );
+    localStorage.setItem(
+      "welcomeText",
+      response.data.items[0].fields.welcomeText.content[0].content[0].value,
+    );
+    localStorage.setItem(
+      "aboutText",
+      response.data.items[0].fields.aboutText.content[0].content[0].value,
+    );
   });
 };
 

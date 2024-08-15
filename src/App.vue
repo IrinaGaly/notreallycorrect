@@ -11,5 +11,7 @@ onUnmounted(() => {
   localStorage.removeItem("typeSpeed");
   localStorage.removeItem("removeSpeed");
   localStorage.removeItem("aboutBackground");
+  localStorage.removeItem("welcomeText");
+  localStorage.removeItem("aboutText");
 });
 </script>

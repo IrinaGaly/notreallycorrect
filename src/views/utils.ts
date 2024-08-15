@@ -78,7 +78,7 @@ export function resolveTypingPromises(
   message: string,
   timeout: number,
   signal = null,
-  isRemoving = false,
+  isRemoving = false
 ) {
   return [...message].map(
     (ch, i) =>
@@ -95,7 +95,7 @@ export function resolveTypingPromises(
             clearTimeout(timeoutId);
             reject(new Error("Aborted"));
           });
-      }),
+      })
   );
 }
 
@@ -103,14 +103,14 @@ export function processMessage(
   message: string,
   timeout: number,
   signal: any,
-  isRemoving = false,
+  isRemoving = false
 ) {
   return new Promise((resolve, reject) => {
     const typePromises = resolveTypingPromises(
       message,
       timeout,
       signal,
-      isRemoving,
+      isRemoving
     );
     typePromises.forEach((promise, i, arr) => {
       promise
@@ -132,7 +132,7 @@ export function processMessage(
 export function setImageOrientation(
   image: HTMLImageElement,
   item: Element,
-  isActive: boolean,
+  isActive: boolean
 ) {
   let sizeAttr = image.getAttribute("size")?.toLowerCase()
     ? image.getAttribute("size")?.toLowerCase()
