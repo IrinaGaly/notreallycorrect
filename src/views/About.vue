@@ -1,42 +1,55 @@
 <template>
   <div class="about__container">
     <img :src="imageUrl" class="about__background" />
+    <transition name="fade">
 
     <div v-if="isIntroTyped" class="terminal__about">
-      <div>
-        <router-link to="/" class="cursor-pointer index-toggle inline"
-          >notreallycorrect.</router-link
-        ><span class="no-wrap index-toggle inline contact">| contact |</span
-        ><router-link to="/projects" class="cursor-pointer index-toggle inline"
-          >close X</router-link
-        >
-      </div>
+      <transition name="fade">
+        <div v-if="isContactShown">
+          <div class="terminal__about-contact">CONTACT</div>
+          <div class="bold">e-mail</div>
+          <a
+            href="mailto:be@notreallycorrect.com?body=Hello%20There&body=Tvarujeme%20realitu%20do%20poh%C3%A1dek.%20Jak%20vypad%C3%A1%20ta%20Va%C5%A1e%3F"
+            class="terminal__about-contact--phone index-toggle margin-bottom-xs db"
+            >be@notreallycorrect.com</a
+          >
+          <div class="bold">Tran Anh Tuan</div>
+          <a
+            href="tel:+ 420 733 123 578"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >+ 420 733 123 578</a
+          >
+          <div class="bold">Adam Zajaček</div>
+          <a
+            href="tel:+ 420 733 123 577"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >+420 733 123 577</a
+          >
+          <div class="bold">instagram</div>
+          <a
+            href="https://www.instagram.com/notreallycorrect/"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >notreallycorrect</a
+          >
+          <div>NotReallyCorrect s.r.o.</div>
+          <div class="margin-bottom-xl db">IČO: 21505845</div>
+        </div>
+      </transition>
 
-      <template v-if="isContactShown">
-        <a
-          href="tel:+ 420 777 777 777"
-          class="terminal__about-contact terminal__about-contact--phone index-toggle"
-          >contact us</a
-        >
-        <a
-          href="mailto:notreally@email.com"
-          class="terminal__about-contact terminal__about-contact--email index-toggle"
-          >email us</a
-        >
         <div>
-          <a
-            href="tel:+ 420 777 777 777"
-            class="cursor-pointer index-toggle phone"
-            >+ 420 777 777 777</a
-          >&nbsp;
-          <a
-            href="mailto:notreally@email.com"
-            class="cursor-pointer index-toggle email"
-            >notreally@email.com</a
+          <router-link
+            to="/projects"
+            class="cursor-pointer index-toggle inline bold"
+            >notreallycorrect.</router-link
+          ><span class="no-wrap index-toggle inline contact bold">| contact |</span
+          ><router-link to="/projects" class="cursor-pointer index-toggle inline"
+            >close X</router-link
           >
         </div>
-      </template>
+ 
     </div>
+  </transition>
+
   </div>
   <Terminal ref="terminal" class="terminal--about">
     <template #content>
@@ -78,11 +91,13 @@ const elementsToType = ref();
 const isIntroTyped = ref(false);
 const isContactShown = ref(false);
 const imageUrl = ref("");
+const aboutText = ref<string[]>([]);
 
 const typeGreetingWithCallback = () => {
   elementsToType.value = document.querySelectorAll("nav > *");
   const genericTextElement = document.querySelector("#generic-text");
-  typer(genericTextElement, greetingSpeed.value)
+  const typerInstance = typer("#generic-text", greetingSpeed.value);
+  typerInstance
     .line("contact us")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
@@ -99,24 +114,21 @@ const typeGreetingWithCallback = () => {
       genericTextElement && (genericTextElement.innerHTML = "");
       isContactShown.value = true;
       const typeLoop = () => {
-        typer(genericTextElement, greetingSpeed.value)
-          .line("NotReallyCorrect s.r.o.")
-          .pause(greetingSpeed.value.max + 100)
-          .continue("<br/>Jsme pohádkáři. Ne tak úplně architekti.")
-          .pause(200)
-          .back(24, 40)
-          .continue("Ne tak úplně designéři.")
-          .pause(200)
-          .back(23, 40)
-          .continue("Ne tak úplně v reálu.")
-          .pause(200)
-          .back("all", 40)
-          .pause(200)
-          .end(() => {
-            typeLoop();
-          });
+        let typerInstance = typer(genericTextElement, greetingSpeed.value);
+
+        aboutText.value.forEach((line, index) => {
+          typerInstance
+            .line(line)
+            .pause(greetingSpeed.value.max + 300)
+            .back("all", greetingSpeed.value.max);
+        });
+
+        typerInstance.end(() => {
+          typeLoop(); // Recursively call typeLoop to repeat the typing animation
+        });
       };
 
+      // Start the loop
       typeLoop();
     });
 };
@@ -149,6 +161,8 @@ const typeRecursive = (i = 0) => {
 };
 
 onMounted(() => {
+  aboutText.value = localStorage.getItem("aboutText")?.split("\n") ?? [""];
+
   greetingSpeed.value = {
     min:
       Number(localStorage.getItem("removeSpeed")) >=
