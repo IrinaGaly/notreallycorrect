@@ -169,7 +169,6 @@ const surprise = ref<any>({});
 const shouldShowSurprise = ref<boolean>(false);
 const intervalId = ref<any>(null);
 const welcomeText = ref<string[]>([]);
-const isProgrammaticScroll = ref<boolean>(false);
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -249,7 +248,6 @@ const scrollToProjectById = (id: string) => {
       );
     } else {
       scrollElementIntoView(item);
-      isProgrammaticScroll.value = true;
     }
   }
 };
