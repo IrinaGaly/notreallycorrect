@@ -23,7 +23,7 @@
         <div data-toBeTyped=" | ">|</div>
         <a
           href="mailto:be@notreallycorrect.com?body=Hello%20There&body=Tvarujeme%20realitu%20do%20poh%C3%A1dek.%20Jak%20vypad%C3%A1%20ta%20Va%C5%A1e%3F"
-          data-toBeTyped="email "
+          data-toBeTyped="email"
           class="cursor-pointer index-toggle"
           > email </a
         >

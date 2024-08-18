@@ -37,7 +37,7 @@
   .terminal__item--title {
     flex: 1;
     text-align: left;
-    margin-right: 5.5rem;
+    margin-right: 6rem;
   }
 
   .terminal__item--year {
@@ -176,9 +176,13 @@
   .terminal__wrapper {
     overflow-y: scroll;
     max-height: 16vh;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
-  .terminal__item {
+  .terminal__item:not(:last-of-type) {
     margin-bottom: 3px;
   }
 
