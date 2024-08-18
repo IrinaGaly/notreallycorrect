@@ -2,14 +2,12 @@
   <div class="about__container">
     <img
       :src="imageUrl"
-      class="about__background"
-      :class="{ 'about__background--margin': isContactShown }"
+      class="about__background about__background--margin"
     />
     <transition name="fade">
-      <div v-if="isIntroTyped" class="terminal__about">
+      <div class="terminal__about">
         <transition name="fade">
           <div
-            v-if="isContactShown"
             class="terminal__about-phone terminal__about-contacts"
           >
             <div class="terminal__about-contact">CONTACT</div>
@@ -42,7 +40,7 @@
           </div>
         </transition>
 
-        <div class="terminal__about-phone terminal__about-panel">
+        <div v-if="isIntroTyped" class="terminal__about-phone terminal__about-panel">
           <router-link
             to="/projects"
             class="cursor-pointer index-toggle inline bold"
@@ -114,7 +112,7 @@ const typeGreetingWithCallback = () => {
     .continue("+ 420 777 777 777")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
-    .continue("notreally@email.com")
+    .continue("be@notreallycorrect.com")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
     .end(() => {

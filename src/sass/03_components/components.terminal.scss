@@ -54,7 +54,6 @@
 
 .terminal__container {
   display: flex;
-  //height: 100%;
   min-width: fit-content;
   width: 100%;
   justify-content: center;
@@ -168,9 +167,19 @@
     top: 8%;
     max-width: 100%;
     max-width: 85%;
-    max-height: 18vh;
+
     height: fit-content;
-    font-size: 12px;
+    font-size: 10px;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .terminal__wrapper {
+    overflow-y: scroll;
+    max-height: 16vh;
+  }
+
+  .terminal__item {
+    margin-bottom: 3px;
   }
 
   .terminal__cursor {
@@ -226,13 +235,13 @@
   .terminal__container {
     min-width: unset;
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    max-height: 18vh;
+    // overflow-x: hidden;
+    // overflow-y: scroll;
+    // max-height: 18vh;
   }
 
   .terminal__list {
-    max-height: 16vh;
+    //max-height: 16vh;
   }
 
   .terminal__content {
