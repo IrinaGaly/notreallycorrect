@@ -32,9 +32,9 @@ export default defineConfig({
     "process.env": process.env,
   },
   build: {
-    outDir: "dist", // Specify the output directory for Vite build
-    assetsDir: ".", // Specify the assets directory (relative to outDir)
-    emptyOutDir: true, // Clear the output directory before building
+    outDir: "dist",
+    assetsDir: ".",
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         chunkFileNames: "assets/[name].[hash].js",
@@ -43,5 +43,5 @@ export default defineConfig({
       },
     },
   },
-  base: "/", // Adjust base path as needed
+  base: "/notreallycorrect/",
 });
