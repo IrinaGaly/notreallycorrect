@@ -44,7 +44,7 @@
             class="cursor-pointer index-toggle inline bold"
             >notreallycorrect.</router-link
           ><span class="no-wrap index-toggle inline contact bold"
-            >| about |</span
+            >&nbsp;about |</span
           ><router-link
             to="/projects"
             class="cursor-pointer index-toggle inline"
@@ -104,7 +104,7 @@ const typeGreetingWithCallback = () => {
     .line("contact us")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
-    .continue("email us")
+    .continue("e-mail us")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
     .continue("+ 420 777 777 777")
