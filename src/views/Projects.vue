@@ -105,7 +105,7 @@
           <div data-toBeTyped=" | "></div>
           <a
             href="mailto:adam.zajacek@gmail.com"
-            data-toBeTyped="email"
+            data-toBeTyped="e-mail"
             class="terminal__link"
           ></a>
         </nav>
@@ -342,7 +342,7 @@ const handleHover = async (
   typeTimeout = 100,
   removeTimeout = 90,
 ) => {
-  if (introTyped.value && !isPhone()) {
+  if (introTyped.value) {
     closeIndex();
     const signal = createController();
 
