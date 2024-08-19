@@ -22,7 +22,7 @@
             <a
               href="tel:+ 420 733 123 577"
               class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >+420 733 123 577</a
+              >+ 420 733 123 577</a
             >
             <div class="bold">instagram</div>
             <a
