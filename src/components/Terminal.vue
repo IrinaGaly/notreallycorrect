@@ -103,6 +103,19 @@ const setIndex = (projectId: string) => {
     props.projects,
     (project) => project.sys.id === projectId,
   );
+  scrollToItem(selectedIndex.value);
+};
+
+const scrollToItem = (index: number) => {
+  if (index >= 0 && index < props.projects.length) {
+    const itemElement = document.querySelector(
+      `.terminal__list .terminal__item:nth-child(${index + 1})`,
+    );
+    itemElement?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }
 };
 
 defineExpose({

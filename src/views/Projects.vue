@@ -32,7 +32,12 @@
               :asset="projects.includes.Asset"
               @hover-over="
                 (id: string, message: string) =>
-                  overProject(project.sys.id, id, message)
+                  overProject(
+                    project.sys.id,
+                    id,
+                    message,
+                    project.fields.isDead,
+                  )
               "
               @mouseout="returnVisibility"
               @image-loaded="(id: string) => imageLoaded(id)"
@@ -59,7 +64,12 @@
               :is-current="index === currentIndex"
               @hover-over="
                 (id: string, message: string) =>
-                  overProject(project.sys.id, id, message)
+                  overProject(
+                    project.sys.id,
+                    id,
+                    message,
+                    project.fields.isDead,
+                  )
               "
               @mouseout="returnVisibility"
               @image-loaded="addSizeClasses(null)"
@@ -199,24 +209,31 @@ const imageLoaded = (id: string) => {
   setMarginsRandomly();
 };
 
-const overProject = (projectId: string, id: string, message: string) => {
+const overProject = (
+  projectId: string,
+  id: string,
+  message: string,
+  isDead: boolean,
+) => {
   terminal?.value?.setIndex(projectId);
 
-  if (!scrolling.value && !isPhone()) {
-    addSizeClasses(id, true);
-    introTyped.value &&
-      handleHover(
-        message,
-        greetingSpeed.value.max ?? 10,
-        greetingSpeed.value.min ?? 11,
-      );
-  } else if (!scrolling.value && isPhone()) {
-    introTyped.value &&
-      handleHover(
-        message,
-        greetingSpeed.value.max ?? 10,
-        greetingSpeed.value.min ?? 11,
-      );
+  if (!isDead) {
+    if (!scrolling.value && !isPhone()) {
+      addSizeClasses(id, true);
+      introTyped.value &&
+        handleHover(
+          message,
+          greetingSpeed.value.max ?? 10,
+          greetingSpeed.value.min ?? 11,
+        );
+    } else if (!scrolling.value && isPhone()) {
+      introTyped.value &&
+        handleHover(
+          message,
+          greetingSpeed.value.max ?? 10,
+          greetingSpeed.value.min ?? 11,
+        );
+    }
   }
 };
 
