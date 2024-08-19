@@ -24,3 +24,9 @@ a {
   height: 100%;
   background: black;
 }
+
+@media only screen and (max-width: 768px) {
+  body {
+    overflow: hidden;
+  }
+}

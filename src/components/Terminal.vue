@@ -3,14 +3,14 @@
     <transition name="fade">
       <div v-if="introTyped" class="terminal__outdated">
         <div id="name" class="font-bold">notreallycorrect.</div>
-        <div data-toBeTyped="  ">&nbsp;</div>
+        <div data-toBeTyped="  |">&nbsp;</div>
         <div
           id="about-link"
           data-toBeTyped="about"
           class="cursor-pointer index-toggle"
           @click="goToAbout"
         >
-          about 
+          | about 
         </div>
         <div data-toBeTyped=" | ">|</div>
         <a
@@ -31,7 +31,7 @@
     </transition>
     <div class="terminal__wrapper">
       <div class="terminal__container">
-        <template v-if="indexListOpened">
+        <template v-if="isIndexListOpen">
           <ul class="terminal__list">
             <li
               v-for="(project, index) in projects"
@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<Props>(), {
   introTyped: false,
 });
 
-const indexListOpened = ref(false);
+const isIndexListOpen = ref(false);
 const emit = defineEmits(["open-index", "scroll-to-project"]);
 const selectedIndex = ref<number | null>(null);
 
@@ -80,12 +80,12 @@ const indexList = () => {
 };
 
 const closeIndexList = () => {
-  indexListOpened.value = false;
+  isIndexListOpen.value = false;
   selectedIndex.value = null;
 };
 
 const toggleIdexList = () => {
-  indexListOpened.value = !indexListOpened.value;
+  isIndexListOpen.value = !isIndexListOpen.value;
 };
 
 const goToProject = (project: any, index: number) => {

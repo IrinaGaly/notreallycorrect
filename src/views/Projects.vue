@@ -79,36 +79,38 @@
     @open-index="openIndexList"
   >
     <template #content>
-      <nav
-        v-if="!indexListOpened && !introTyped"
+      <div
+        v-if="!isIndexListOpen && !introTyped"
         id="generic-text"
         class="terminal__content"
       >
-        <div
-          id="name"
-          data-toBeTyped="notreallycorrect."
-          class="font-bold"
-        ></div>
-        <div data-toBeTyped="  "></div>
-        <div
-          id="about-link"
-          data-toBeTyped="about"
-          class="cursor-pointer"
-        ></div>
-        <div data-toBeTyped=" | "></div>
-        <div
-          id="index-toggle"
-          data-toBeTyped="index"
-          class="cursor-pointer"
-        ></div>
-        <div data-toBeTyped=" | "></div>
-        <a
-          href="mailto:adam.zajacek@gmail.com"
-          data-toBeTyped="email"
-          class="terminal__link"
-        ></a>
-      </nav>
-      <div v-else-if="!indexListOpened" id="terminal"></div>
+        <nav id="generic-text" class="terminal__content no-wrap">
+          <div
+            id="name"
+            data-toBeTyped="notreallycorrect."
+            class="font-bold"
+          ></div>
+          <div data-toBeTyped=" "></div>
+          <div
+            id="about-link"
+            data-toBeTyped="about"
+            class="cursor-pointer"
+          ></div>
+          <div data-toBeTyped=" | "></div>
+          <div
+            id="index-toggle"
+            data-toBeTyped="index"
+            class="cursor-pointer"
+          ></div>
+          <div data-toBeTyped=" | "></div>
+          <a
+            href="mailto:adam.zajacek@gmail.com"
+            data-toBeTyped="email"
+            class="terminal__link"
+          ></a>
+        </nav>
+      </div>
+      <div v-else-if="!isIndexListOpen" id="terminal"></div>
     </template>
   </Terminal>
 </template>
@@ -151,7 +153,7 @@ export interface TerminalType {
 
 const introTyped = ref(false);
 const container = ref(null);
-const indexListOpened = ref(false);
+const isIndexListOpen = ref(false);
 const projects = ref<any>([]);
 const projectsLocal = ref();
 const scrolling = ref(false);
@@ -171,6 +173,7 @@ const surprise = ref<any>({});
 const shouldShowSurprise = ref<boolean>(false);
 const intervalId = ref<any>(null);
 const welcomeText = ref<string[]>([]);
+const middleProject = ref<any>({});
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -234,7 +237,7 @@ const gify = () => {
 };
 
 const openIndexList = () => {
-  indexListOpened.value = true;
+  isIndexListOpen.value = true;
 };
 
 const scrollToProjectById = (id: string) => {
@@ -251,6 +254,14 @@ const scrollToProjectById = (id: string) => {
     } else {
       scrollElementIntoView(item);
     }
+  }
+};
+
+const scrollToProjectInitial = (id: string) => {
+  returnVisibility();
+  const item = document.getElementById(id);
+  if (item) {
+    scrollElementIntoView(item);
   }
 };
 
@@ -331,7 +342,7 @@ const handleHover = async (
   typeTimeout = 100,
   removeTimeout = 90,
 ) => {
-  if (introTyped.value) {
+  if (introTyped.value && !isPhone()) {
     closeIndex();
     const signal = createController();
 
@@ -453,9 +464,12 @@ const fetchProjects = async () => {
   const shuffledItems = _shuffle(remainingItems);
 
   projects.value.items = [latestItem, ...shuffledItems];
+  middleProject.value =
+    projects.value.items[Math.floor(projects.value.items.length - 1 / 2)];
 
   if (!isPhone()) {
-    getChunkedProjects();
+    await getChunkedProjects();
+    scrollToProjectInitial(middleProject.value.sys.id);
   } else {
     projectsLocal.value = await projects.value.items;
     calculateInitialPositions();
@@ -463,7 +477,7 @@ const fetchProjects = async () => {
 };
 
 const closeIndex = () => {
-  indexListOpened.value = false;
+  isIndexListOpen.value = false;
 };
 
 const randomizePosition = (isTopHalf: boolean) => {
