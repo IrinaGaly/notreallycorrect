@@ -1,16 +1,11 @@
 <template>
   <div class="about__container">
-    <img
-      :src="imageUrl"
-      class="about__background about__background--margin"
-    />
+    <img :src="imageUrl" class="about__background about__background--margin" />
     <transition name="fade">
       <div class="terminal__about">
         <transition name="fade">
-          <div
-            class="terminal__about-phone terminal__about-contacts"
-          >
-            <div class="terminal__about-contact">CONTACT</div>
+          <div class="terminal__about-phone terminal__about-contacts">
+            <div class="terminal__about-contact">ABOUT</div>
             <div class="bold">e-mail</div>
             <a
               href="mailto:be@notreallycorrect.com?body=Hello%20There&body=Tvarujeme%20realitu%20do%20poh%C3%A1dek.%20Jak%20vypad%C3%A1%20ta%20Va%C5%A1e%3F"
@@ -40,13 +35,16 @@
           </div>
         </transition>
 
-        <div v-if="isIntroTyped" class="terminal__about-phone terminal__about-panel">
+        <div
+          v-if="isIntroTyped"
+          class="terminal__about-phone terminal__about-panel"
+        >
           <router-link
             to="/projects"
             class="cursor-pointer index-toggle inline bold"
             >notreallycorrect.</router-link
           ><span class="no-wrap index-toggle inline contact bold"
-            >| contact |</span
+            >| about |</span
           ><router-link
             to="/projects"
             class="cursor-pointer index-toggle inline"
@@ -69,7 +67,7 @@
           <span data-toBeTyped=" "></span>
           <span
             id="about-link"
-            data-toBeTyped="contact"
+            data-toBeTyped="about"
             class="cursor-pointer"
           ></span>
           <span data-toBeTyped=" | "></span>

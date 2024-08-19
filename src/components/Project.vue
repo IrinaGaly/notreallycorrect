@@ -17,7 +17,7 @@
           }"
           @mouseover="hoverOver(image)"
           @mouseleave="onMouseleave"
-          @click="clickImage(image)"
+          @click.stop.prevent="clickImage(image)"
         />
       </Transition>
     </template>
