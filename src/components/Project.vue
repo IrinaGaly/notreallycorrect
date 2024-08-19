@@ -72,11 +72,9 @@ const imageLoaded = (image: Image) => {
   }
 };
 const hoverOver = (image: Image) => {
-  if (!props.project.fields.isDead) {
-    hovered.value = true;
-    mainDescription.value = props.project.fields.title;
-    emit("hover-over", image?.sys?.id, getImageDescription(image));
-  }
+  hovered.value = true;
+  mainDescription.value = props.project.fields.title;
+  emit("hover-over", image?.sys?.id, getImageDescription(image));
 };
 
 const onMouseleave = () => {
