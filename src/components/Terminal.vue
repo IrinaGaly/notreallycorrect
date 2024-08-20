@@ -112,7 +112,7 @@ const scrollToItem = (index: number) => {
       `.terminal__list .terminal__item:nth-child(${index + 1})`,
     );
     itemElement?.scrollIntoView({
-      behavior: "smooth",
+      behavior: "instant",
       block: "nearest",
     });
   }
