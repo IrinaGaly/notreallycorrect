@@ -137,7 +137,6 @@ import Project from "@/components/Project";
 import Terminal from "@/components/Terminal";
 import { useSwipe } from "./../composables/swipe";
 import { useGrabCursor } from "./../composables/grabCursor";
-import { useDragScroll } from "./../composables/dragScroll";
 
 import _find from "lodash/find";
 import _filter from "lodash/filter";
@@ -616,7 +615,6 @@ onMounted(() => {
   };
 });
 
-// useDragScroll(swipeArea);
 useGrabCursor();
 
 useSwipe(swipeArea, {
