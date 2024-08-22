@@ -187,6 +187,7 @@ const shouldShowSurprise = ref<boolean>(false);
 const intervalId = ref<any>(null);
 const welcomeText = ref<string[]>([]);
 const middleProject = ref<any>({});
+let timeoutId: NodeJS.Timeout | null = null;
 
 const handleClickOutside = (event: MouseEvent) => {
   if (
@@ -289,11 +290,18 @@ const scrollToProjectInitial = (id: string) => {
 };
 
 const scrollTo = (id: string) => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+
   if (isPhone()) {
     scrollToProjectById(id);
   } else {
     scrollToProjectById(id);
-    setTimeout(() => scrollToProjectById(id), 1200);
+    timeoutId = setTimeout(() => {
+      scrollToProjectById(id);
+      timeoutId = null;
+    }, 1000);
   }
 };
 
