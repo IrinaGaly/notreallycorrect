@@ -42,6 +42,7 @@
               @mouseout="returnVisibility"
               @image-loaded="(id: string) => imageLoaded(id)"
               @switch-img-in-project="(id: string) => onImageChange(id)"
+              @switch-img-in-project-ipad="(id: string) => onImageChange(id)"
             />
           </li>
         </ul>
@@ -126,7 +127,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed, onUnmounted } from "vue";
 import axios from "axios";
 // @ts-ignore
 import typer from "typer-js";
@@ -135,6 +136,7 @@ import Project from "@/components/Project";
 // @ts-ignore
 import Terminal from "@/components/Terminal";
 import { useSwipe } from "./../composables/swipe";
+import { useDragScroll } from "./../composables/dragScroll";
 
 import _find from "lodash/find";
 import _filter from "lodash/filter";
@@ -200,6 +202,9 @@ const handleClickOutside = (event: MouseEvent) => {
 };
 
 const onImageChange = (id: string) => {
+  if (isIPad()) {
+    returnVisibility();
+  }
   addSizeClasses(id, true);
   addSizeClasses(id);
 };
@@ -338,7 +343,11 @@ const onScroll = () => {
 };
 
 const isPhone = () =>
-  window.matchMedia("only screen and (max-width: 768px)").matches;
+  window.matchMedia("only screen and (max-width: 668px)").matches;
+
+const isIPad = () =>
+  window.matchMedia("only screen and (max-width: 1366px)").matches &&
+  window.matchMedia("only screen and (min-width: 668px)").matches;
 
 const getProjects = async () =>
   await axios.get(API_PROJECTS).then((response) => {
@@ -597,6 +606,8 @@ onMounted(() => {
         : Number(localStorage.getItem("typeSpeed")),
   };
 });
+
+useDragScroll(swipeArea);
 
 useSwipe(swipeArea, {
   onSwipeUp: () => {

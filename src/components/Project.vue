@@ -63,14 +63,21 @@ const emit = defineEmits([
   "mouseout",
   "image-loaded",
   "switch-img-in-project",
+  "switch-img-in-project-ipad",
 ]);
 const currentIndex = ref<number>(0);
+const currentIndexIpad = ref<number>(-1);
 
 const imageLoaded = (image: Image) => {
   if (props.isCurrent && props.isPhone) {
     hoverOver(image);
   }
 };
+
+const isIPad = () =>
+  window.matchMedia("only screen and (max-width: 1366px)").matches &&
+  window.matchMedia("only screen and (min-width: 668px)").matches;
+
 const hoverOver = (image: Image) => {
   hovered.value = true;
   mainDescription.value = props.project.fields.title;
@@ -83,7 +90,10 @@ const onMouseleave = () => {
 };
 
 const clickImage = (image: Image) => {
-  if ((props.isCurrent && props.isPhone) || !props.isPhone) {
+  if (isIPad() && currentIndexIpad.value === -1) {
+    currentIndexIpad.value += 1;
+    emit("switch-img-in-project-ipad", image?.sys?.id || "");
+  } else if ((props.isCurrent && props.isPhone) || !props.isPhone) {
     currentIndex.value =
       (currentIndex.value + 1) % props.project.fields.images.length;
     emit("switch-img-in-project", image?.sys?.id || "");

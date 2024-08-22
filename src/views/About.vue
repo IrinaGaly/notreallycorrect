@@ -16,13 +16,13 @@
             <a
               href="tel:+ 420 733 123 578"
               class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >+ 420 733 123 578</a
+              >+420 733 123 578</a
             >
             <div class="bold">Adam Zajaček</div>
             <a
               href="tel:+ 420 733 123 577"
               class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >+ 420 733 123 577</a
+              >+420 733 123 577</a
             >
             <div class="bold">instagram</div>
             <a
@@ -107,7 +107,7 @@ const typeGreetingWithCallback = () => {
     .continue("e-mail us")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
-    .continue("+ 420 777 777 777")
+    .continue("+420 777 777 777")
     .pause(greetingSpeed.value.max + 100)
     .back("all", 40)
     .continue("be@notreallycorrect.com")
