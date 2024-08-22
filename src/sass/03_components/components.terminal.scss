@@ -161,6 +161,13 @@
   }
 }
 
+@media screen and (max-width: 1366px) {
+  .terminal__about {
+    bottom: 102px;
+    left: 32px;
+  }
+}
+
 @media only screen and (max-width: 668px) {
   .terminal {
     min-height: 2rem;
