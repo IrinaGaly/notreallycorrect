@@ -2,7 +2,7 @@
   <div
     id="scrollContainer"
     ref="swipeArea"
-    class="scroll-container"
+    :class="['scroll-container', {'non-scroll-container' : isIPad()}]"
     v-dragscroll
     @scroll="onScroll"
     @mousedown="startDrag"
@@ -136,6 +136,7 @@ import Project from "@/components/Project";
 // @ts-ignore
 import Terminal from "@/components/Terminal";
 import { useSwipe } from "./../composables/swipe";
+import { useGrabCursor } from "./../composables/grabCursor";
 import { useDragScroll } from "./../composables/dragScroll";
 
 import _find from "lodash/find";
@@ -607,7 +608,8 @@ onMounted(() => {
   };
 });
 
-useDragScroll(swipeArea);
+// useDragScroll(swipeArea);
+useGrabCursor();
 
 useSwipe(swipeArea, {
   onSwipeUp: () => {
@@ -626,3 +628,4 @@ watch(currentIndex, (newIndex, oldIndex) => {
   previousIndex.value = oldIndex;
 });
 </script>
+../composables/dragScroll../composables/dragScroll

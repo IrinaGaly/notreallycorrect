@@ -67,7 +67,7 @@
   width: 100%;
   list-style-type: none;
   margin: 1%;
-  transition: all 200ms out 0s;
+  transition: all 700ms ease-in-out 0s;
 }
 
 .project__list {
@@ -89,40 +89,49 @@
 
 .project__active--vertical-s {
   min-width: 30vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-s {
   min-width: 40vw;
+  cursor: pointer;
 }
 
 .project__active--square-s {
   min-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--vertical-m {
   min-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-m {
   min-width: 50vw;
+  cursor: pointer;
 }
 
 .project__active--square-m {
   min-width: 42vw;
+  cursor: pointer;
 }
 
 .project__active--vertical-l {
   min-width: 35vw;
   max-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-l {
   min-width: 60vw;
   max-width: 60vw;
+  cursor: pointer;
 }
 
 .project__active--square-l {
   min-width: 47vw;
+  cursor: pointer;
 }
 
 @keyframes showup {
@@ -188,6 +197,10 @@
 }
 
 @media only screen and (max-width: 668px) {
+  .project {
+    transition: all 200ms out 0s;
+  }
+
   .project-container {
     overflow: hidden;
   }
