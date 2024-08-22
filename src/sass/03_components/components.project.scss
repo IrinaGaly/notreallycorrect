@@ -89,40 +89,49 @@
 
 .project__active--vertical-s {
   min-width: 30vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-s {
   min-width: 40vw;
+  cursor: pointer;
 }
 
 .project__active--square-s {
   min-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--vertical-m {
   min-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-m {
   min-width: 50vw;
+  cursor: pointer;
 }
 
 .project__active--square-m {
   min-width: 42vw;
+  cursor: pointer;
 }
 
 .project__active--vertical-l {
   min-width: 35vw;
   max-width: 35vw;
+  cursor: pointer;
 }
 
 .project__active--horizontal-l {
   min-width: 60vw;
   max-width: 60vw;
+  cursor: pointer;
 }
 
 .project__active--square-l {
   min-width: 47vw;
+  cursor: pointer;
 }
 
 @keyframes showup {
