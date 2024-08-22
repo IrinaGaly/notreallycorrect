@@ -3,6 +3,13 @@
   padding: 30%;
 }
 
+.non-scroll-container {
+  overflow: scroll !important;
+  touch-action: initial !important;
+  user-select: initial !important;
+  -webkit-user-drag: initial !important;
+}
+
 @media only screen and (max-width: 668px) {
   .container {
     width: 100%;

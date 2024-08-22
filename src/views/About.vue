@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 // @ts-ignore
 import typer from "typer-js";
 // @ts-ignore
@@ -164,6 +164,7 @@ const typeRecursive = (i = 0) => {
 };
 
 onMounted(() => {
+  document.body.style.overflow = 'hidden';
   aboutText.value = localStorage.getItem("aboutText")?.split("\n") ?? [""];
 
   greetingSpeed.value = {
@@ -182,6 +183,9 @@ onMounted(() => {
   setBackground();
 });
 
+onUnmounted(() => {
+  document.body.style.overflow = 'scroll';
+})
 watch(
   () => isIntroTyped.value,
   () => {

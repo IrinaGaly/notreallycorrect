@@ -20,7 +20,7 @@ export function useDragScroll(elementRef: Ref<any | null>) {
       iPadDimensions.some(
         (dim) =>
           (width === dim.width && height === dim.height) ||
-          (width === dim.height && height === dim.width),
+          (width === dim.height && height === dim.width)
       ) && pixelRatio >= 1
     );
   }
@@ -105,11 +105,11 @@ export function useDragScroll(elementRef: Ref<any | null>) {
     if (elementRef.value && isIPad()) {
       (elementRef.value as HTMLElement).addEventListener(
         "mousedown",
-        handleMouseDown,
+        handleMouseDown
       );
       (elementRef.value as HTMLElement).addEventListener(
         "touchstart",
-        handleTouchStart,
+        handleTouchStart
       );
     }
   });
@@ -118,11 +118,11 @@ export function useDragScroll(elementRef: Ref<any | null>) {
     if (elementRef.value) {
       (elementRef.value as HTMLElement).removeEventListener(
         "mousedown",
-        handleMouseDown,
+        handleMouseDown
       );
       (elementRef.value as HTMLElement).removeEventListener(
         "touchstart",
-        handleTouchStart,
+        handleTouchStart
       );
     }
     document.removeEventListener("mousemove", handleMouseMove);

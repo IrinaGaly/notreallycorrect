@@ -67,7 +67,7 @@
   width: 100%;
   list-style-type: none;
   margin: 1%;
-  transition: all 200ms out 0s;
+  transition: all 700ms ease-in-out 0s;
 }
 
 .project__list {
@@ -188,6 +188,10 @@
 }
 
 @media only screen and (max-width: 668px) {
+  .project {
+    transition: all 200ms out 0s;
+  }
+
   .project-container {
     overflow: hidden;
   }
