@@ -248,33 +248,33 @@
 
 @media only screen and (max-width: 1366px) {
   .project--horizontal-s {
-    max-width: 35vw;
-    min-width: 35vw;
-  }
-
-  .project--horizontal-m {
     max-width: 45vw;
     min-width: 45vw;
   }
 
-  .project--horizontal-l {
+  .project--horizontal-m {
     max-width: 55vw;
     min-width: 55vw;
   }
 
+  .project--horizontal-l {
+    max-width: 65vw;
+    min-width: 65vw;
+  }
+
   .project--vertical-s {
-    min-width: 30vw;
-    max-width: 30vw;
+    min-width: 40vw;
+    max-width: 40vw;
   }
 
   .project--vertical-m {
-    min-width: 33vw;
-    max-width: 33vw;
+    min-width: 43vw;
+    max-width: 43vw;
   }
 
   .project--vertical-l {
-    min-width: 40vw;
-    max-width: 40vw;
+    min-width: 50vw;
+    max-width: 50vw;
   }
 
   .project--square-s {
@@ -283,29 +283,29 @@
   }
 
   .project--square-m {
-    max-width: 30vw;
-    min-width: 30vw;
-  }
-
-  .project--square-l {
     max-width: 40vw;
     min-width: 40vw;
   }
 
-  .project__active--vertical-s {
-    min-width: 40vw;
-  }
-
-  .project__active--horizontal-s {
+  .project--square-l {
+    max-width: 50vw;
     min-width: 50vw;
   }
 
+  .project__active--vertical-s {
+    min-width: 50vw;
+  }
+
+  .project__active--horizontal-s {
+    min-width: 60vw;
+  }
+
   .project__active--square-s {
-    min-width: 45vw;
+    min-width: 55vw;
   }
 
   .project__active--vertical-m {
-    min-width: 45vw;
+    min-width: 55vw;
   }
 
   .project__active--horizontal-m {
@@ -313,20 +313,20 @@
   }
 
   .project__active--square-m {
-    min-width: 52vw;
+    min-width: 62vw;
   }
 
   .project__active--vertical-l {
-    min-width: 45vw;
-    max-width: 45vw;
+    min-width: 55vw;
+    max-width: 55vw;
   }
 
   .project__active--horizontal-l {
-    min-width: 70vw;
-    max-width: 70vw;
+    min-width: 80vw;
+    max-width: 80vw;
   }
 
   .project__active--square-l {
-    min-width: 57vw;
+    min-width: 67vw;
   }
 }
