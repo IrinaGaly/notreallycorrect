@@ -86,6 +86,7 @@
     ref="terminal"
     :intro-typed="introTyped"
     :projects="projects.items"
+    :scrolling="scrolling"
     @scroll-to-project="scrollTo"
     @open-index="openIndexList"
   >
@@ -127,7 +128,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, computed, onUnmounted } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
 // @ts-ignore
 import typer from "typer-js";
@@ -156,6 +157,7 @@ import {
   API_PROJECTS_SURPRISE,
   removeActiveClasses,
   chunkSizes,
+  handleScrollInTerminal,
 } from "./utils";
 
 export interface TerminalType {
@@ -595,6 +597,10 @@ const fetchSurprise = async () => {
 };
 
 onMounted(() => {
+  if (isIPad()) {
+    handleScrollInTerminal();
+  }
+
   welcomeText.value = localStorage.getItem("welcomeText")?.split("\n") ?? [""];
   fetchProjects();
   typeGreeting();
@@ -634,4 +640,3 @@ watch(currentIndex, (newIndex, oldIndex) => {
   previousIndex.value = oldIndex;
 });
 </script>
-../composables/dragScroll../composables/dragScroll

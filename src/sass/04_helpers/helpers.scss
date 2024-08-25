@@ -7,6 +7,10 @@
   display: none;
 }
 
+.disable-clicks {
+  pointer-events: none;
+}
+
 @keyframes fadeAnimation {
   from {
     opacity: 0;

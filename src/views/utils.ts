@@ -192,3 +192,36 @@ export function removeActiveClasses(element: Element) {
     }
   });
 }
+
+export function handleScrollInTerminal() {
+  document.addEventListener("DOMContentLoaded", function () {
+    const terminalWrapper = document.querySelector(".terminal-wrapper");
+    const terminal = document.querySelector(".terminal");
+
+    function handleScroll(event: any) {
+      if (terminalWrapper?.contains(event.target)) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (event.deltaY !== 0) {
+          terminalWrapper.scrollTop += event.deltaY;
+        }
+        if (event.deltaX !== 0) {
+          terminalWrapper.scrollLeft += event.deltaX;
+        }
+      }
+    }
+
+    terminal?.addEventListener("wheel", handleScroll, { passive: false });
+
+    terminal?.addEventListener("touchmove", handleScroll, { passive: false });
+
+    terminal?.addEventListener("mouseenter", () => {
+      document.body.style.overflow = "hidden";
+    });
+
+    terminal?.addEventListener("mouseleave", () => {
+      document.body.style.overflow = "";
+    });
+  });
+}
