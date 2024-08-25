@@ -144,7 +144,7 @@
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 @keyframes blink {
@@ -177,8 +177,14 @@
 
 @media screen and (max-width: 1366px) {
   .terminal__about {
-    bottom: 102px;
+    bottom: calc(2rem * 3);
     left: 32px;
+  }
+
+  .terminal__item {
+    &:hover {
+      font-weight: normal;
+    }
   }
 }
 
@@ -262,5 +268,11 @@
   .terminal__container::-webkit-scrollbar {
     display: none;
   }
+}
 
+@media only screen and (orientation: landscape) {
+  .terminal__about {
+    bottom: calc(2rem * 3);
+    left: 32px;
+  }
 }
