@@ -161,6 +161,20 @@
   }
 }
 
+.terminal__wrapper {
+  overflow-y: scroll;
+  max-height: 16vh;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.terminal__item:not(:last-of-type) {
+  margin-bottom: 3px;
+}
+
 @media screen and (max-width: 1366px) {
   .terminal__about {
     bottom: 102px;
@@ -181,19 +195,7 @@
     margin: 1.5rem;
   }
 
-  .terminal__wrapper {
-    overflow-y: scroll;
-    max-height: 16vh;
-    overflow-x: hidden;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  .terminal__item:not(:last-of-type) {
-    margin-bottom: 3px;
-  }
 
   .terminal__cursor {
     width: 0.4rem;
@@ -260,4 +262,5 @@
   .terminal__container::-webkit-scrollbar {
     display: none;
   }
+
 }
