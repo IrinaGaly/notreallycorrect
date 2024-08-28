@@ -1,11 +1,11 @@
 .terminal {
-  min-height: 2rem;
+  min-height: 32px;
   color: whitesmoke;
   background-color: #0000ff;
   position: fixed;
   bottom: 0;
   left: 0;
-  margin: 2rem;
+  margin: 32px;
   width: fit-content;
   padding: 0.4rem 1rem;
   z-index: 100;
@@ -22,7 +22,7 @@
 
 .terminal__outdated {
   position: absolute;
-  top: -2rem;
+  top: -32px;
   left: 0;
   color: white;
   background-color: transparent;
@@ -105,8 +105,8 @@
 
 .terminal__about {
   position: absolute;
-  bottom: calc(2rem * 3);
-  left: 2rem;
+  bottom: calc(32px * 3);
+  left: 32px;
   color: white;
   background-color: transparent;
   display: flex;
@@ -177,7 +177,7 @@
 
 @media screen and (max-width: 1366px) {
   .terminal__about {
-    bottom: calc(2rem * 3);
+    bottom: calc(32px * 3);
     left: 32px;
   }
 
@@ -190,8 +190,8 @@
 
 @media only screen and (max-width: 668px) {
   .terminal {
-    min-height: 2rem;
-    top: calc(3 * 2rem);
+    min-height: 32px;
+    top: calc(3 * 32px);
     max-width: 100%;
     max-width: 85%;
 
@@ -211,7 +211,7 @@
 
   .terminal--about {
     top: 50px;
-    margin: 2rem;
+    margin: 32px;
 
     .terminal__cursor {
       margin-left: 3px;
@@ -227,7 +227,7 @@
 
   .terminal__about-phone {
     position: absolute;
-    left: 2rem;
+    left: 32px;
     color: white;
     background-color: transparent;
     display: flex;
@@ -272,7 +272,14 @@
 
 @media only screen and (orientation: landscape) {
   .terminal__about {
-    bottom: calc(2rem * 3);
+    bottom: calc(32px * 3);
     left: 32px;
+  }
+}
+
+@media only screen and (min-width: 834px) and (max-width: 1194px) and (orientation: landscape) {
+  .terminal__about {
+    bottom: calc(32px * 3) !important;
+    left: 32px !important;
   }
 }
