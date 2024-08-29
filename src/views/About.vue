@@ -1,59 +1,57 @@
 <template>
   <div class="about__container">
     <img :src="imageUrl" class="about__background about__background--margin" />
-    <transition name="fade">
-      <div class="terminal__about">
-        <transition name="fade">
-          <div class="terminal__about-phone terminal__about-contacts">
-            <div class="terminal__about-contact">ABOUT</div>
-            <div class="bold">e-mail</div>
-            <a
-              href="mailto:be@notreallycorrect.com?body=Hello%20There&body=Tvarujeme%20realitu%20do%20poh%C3%A1dek.%20Jak%20vypad%C3%A1%20ta%20Va%C5%A1e%3F"
-              class="terminal__about-contact--phone index-toggle margin-bottom-xs db"
-              >be@notreallycorrect.com</a
-            >
-            <div class="bold">Tran Anh Tuan</div>
-            <a
-              href="tel:+ 420 733 123 578"
-              class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >+420 733 123 578</a
-            >
-            <div class="bold">Adam Zajaček</div>
-            <a
-              href="tel:+ 420 733 123 577"
-              class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >+420 733 123 577</a
-            >
-            <div class="bold">instagram</div>
-            <a
-              href="https://www.instagram.com/notreallycorrect/"
-              class="cursor-pointer index-toggle phone margin-bottom-xs db"
-              >notreallycorrect</a
-            >
-            <div>NotReallyCorrect s.r.o.</div>
-            <div class="margin-bottom-xl db">IČO: 21505845</div>
-          </div>
-        </transition>
-
-        <div
-          v-if="isIntroTyped"
-          class="terminal__about-phone terminal__about-panel"
-        >
-          <router-link
-            to="/projects"
-            class="cursor-pointer index-toggle inline bold"
-            >notreallycorrect.</router-link
-          ><span class="no-wrap index-toggle inline contact bold"
-            >&nbsp;about |</span
-          ><router-link
-            to="/projects"
-            class="cursor-pointer index-toggle inline"
-            >&nbsp;close &#10005;</router-link
-          >
-        </div>
-      </div>
-    </transition>
   </div>
+  <transition name="fade">
+    <div class="terminal__about">
+      <transition name="fade">
+        <div class="terminal__about-phone terminal__about-contacts">
+          <div class="terminal__about-contact">ABOUT</div>
+          <div class="bold">e-mail</div>
+          <a
+            href="mailto:be@notreallycorrect.com?body=Hello%20There&body=Tvarujeme%20realitu%20do%20poh%C3%A1dek.%20Jak%20vypad%C3%A1%20ta%20Va%C5%A1e%3F"
+            class="terminal__about-contact--phone index-toggle margin-bottom-xs db"
+            >be@notreallycorrect.com</a
+          >
+          <div class="bold">Tran Anh Tuan</div>
+          <a
+            href="tel:+ 420 733 123 578"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >+420 733 123 578</a
+          >
+          <div class="bold">Adam Zajaček</div>
+          <a
+            href="tel:+ 420 733 123 577"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >+420 733 123 577</a
+          >
+          <div class="bold">instagram</div>
+          <a
+            href="https://www.instagram.com/notreallycorrect/"
+            class="cursor-pointer index-toggle phone margin-bottom-xs db"
+            >notreallycorrect</a
+          >
+          <div>NotReallyCorrect s.r.o.</div>
+          <div class="margin-bottom-xl db">IČO: 21505845</div>
+        </div>
+      </transition>
+
+      <div
+        v-if="isIntroTyped"
+        class="terminal__about-phone terminal__about-panel"
+      >
+        <router-link
+          to="/projects"
+          class="cursor-pointer index-toggle inline bold"
+          >notreallycorrect.</router-link
+        ><span class="no-wrap index-toggle inline contact bold"
+          >&nbsp;about |</span
+        ><router-link to="/projects" class="cursor-pointer index-toggle inline"
+          >&nbsp;close &#10005;</router-link
+        >
+      </div>
+    </div>
+  </transition>
   <Terminal ref="terminal" class="terminal--about">
     <template #content>
       <nav id="generic-text" class="terminal__content"></nav>
@@ -164,7 +162,7 @@ const typeRecursive = (i = 0) => {
 };
 
 onMounted(() => {
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = "hidden";
   aboutText.value = localStorage.getItem("aboutText")?.split("\n") ?? [""];
 
   greetingSpeed.value = {
@@ -184,8 +182,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  document.body.style.overflow = 'scroll';
-})
+  document.body.style.overflow = "scroll";
+});
 watch(
   () => isIntroTyped.value,
   () => {
