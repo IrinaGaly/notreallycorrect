@@ -2,7 +2,7 @@
   <div
     id="scrollContainer"
     ref="swipeArea"
-    :class="['scroll-container', {'non-scroll-container' : isIPad()}]"
+    :class="['scroll-container', { 'non-scroll-container': isIPad() }]"
     v-dragscroll
     @scroll="onScroll"
     @mousedown="startDrag"
